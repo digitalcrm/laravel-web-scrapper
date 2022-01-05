@@ -71,7 +71,6 @@ class FetchData extends Component
                     }
 
                     if (($node->filter('div.t-small > ul')->count()) > 0) {
-                        dd($node->filter('div.t-small > ul')->text());
                         $this->results[4] = $node->filter('div.t-small > ul > li')->text();
                     } else {
                         $this->results[4] = null;
