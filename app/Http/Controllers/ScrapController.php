@@ -15,9 +15,7 @@ class ScrapController extends Controller
 
     public function index()
     {
-        return view('scrap.index', [
-            'total' => Scrap::count(),
-        ]);
+        return view('scrap.index');
     }
 
     public function create()
