@@ -18,7 +18,7 @@ class CreateScrapsTable extends Migration
             $table->string('job_title')->nullable();
             $table->string('slug')->nullable();
             $table->string('job_reference')->nullable();
-            $table->string('job_country')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained()->nullOnDelete();
             $table->string('job_state')->nullable(); // state or city
             $table->string('job_location')->nullable();
             $table->string('job_salary')->nullable();

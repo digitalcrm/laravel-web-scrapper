@@ -6,6 +6,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Scrap extends Model
 {
@@ -15,7 +16,7 @@ class Scrap extends Model
         'job_title',
         'slug',
         'job_reference',
-        'job_country',
+        'country_id', // country
         'job_state', // or city
         'job_location',
         'job_salary',
@@ -38,5 +39,10 @@ class Scrap extends Model
         return SlugOptions::create()
         ->generateSlugsFrom('job_title')
         ->saveSlugsTo('slug');
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }

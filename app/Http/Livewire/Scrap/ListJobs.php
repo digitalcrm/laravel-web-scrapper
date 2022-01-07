@@ -13,9 +13,9 @@ class ListJobs extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public function exportJobs()
+    public function exportJobs($value = null)
     {
-        return (new JobExport)->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
+        return (new JobExport($value))->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
     }
 
     public function render()

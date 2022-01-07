@@ -4,12 +4,15 @@ namespace App\Http\Livewire\Scrap;
 
 use Goutte\Client;
 use App\Models\Scrap;
+use App\Models\Country;
 use Livewire\Component;
 
 class FetchData extends Component
 {
-    public $country;
+    public $country = 1;
+
     public $site_url = 'https://www.bayt.com/en/uae/jobs';
+    
     private $results = [
         'job_title',
         'job_description',
@@ -21,14 +24,9 @@ class FetchData extends Component
 
     public function updatedCountry()
     {
-        switch ($this->country) {
-            case 'ind':
-                $this->site_url = 'https://www.bayt.com/en/india/jobs';
-                break;
-
-            default:
-                $this->site_url = 'https://www.bayt.com/en/uae/jobs';
-                break;
+        if ($this->country) {
+            $countryName = Country::findOrFail($this->country);
+            $this->site_url = 'https://www.bayt.com/en/'.$countryName->slug.'/jobs/';
         }
     }
 
@@ -81,6 +79,7 @@ class FetchData extends Component
                         ['job_title' => $this->results[0]],
                         [
                             'job_title' => $this->results[0],
+                            'country_id' => $this->country, // country id store
                             'job_short_description' => $this->results[1],
                             'job_description' => $this->results[1],
                             'job_company' => $this->results[2],
@@ -98,6 +97,8 @@ class FetchData extends Component
 
     public function render()
     {
-        return view('livewire.scrap.fetch-data');
+        $countries = Country::select('id', 'name', 'slug')->get();
+        
+        return view('livewire.scrap.fetch-data', compact('countries'));
     }
 }
