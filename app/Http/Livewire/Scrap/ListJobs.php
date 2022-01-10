@@ -20,7 +20,11 @@ class ListJobs extends Component
 
     public function render()
     {
-        $scrapper = Scrap::latest()->paginate(Scrap::PAGINATE_VALUE);
+        if (request('site') == 'jobbank') {
+            $scrapper = Scrap::where('country_id', 3)->latest()->paginate(Scrap::PAGINATE_VALUE)->WithQueryString();
+        } else {
+            $scrapper = Scrap::where('country_id', '!=' ,3)->latest()->paginate(Scrap::PAGINATE_VALUE)->WithQueryString();
+        }
 
         return view('livewire.scrap.list-jobs', compact('scrapper'));
     }

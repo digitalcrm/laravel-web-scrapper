@@ -23,6 +23,10 @@ class CountrySeeder extends Seeder
                 'sortname' => 'ind',
                 'name' => 'india'
             ],
+            [
+                'sortname' => 'canada',
+                'name' => 'canada'
+            ],
         ];
 
         collect($countries)->each(function ($country) {

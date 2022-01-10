@@ -89,7 +89,7 @@ class FetchData extends Component
                     );
                 });
             }
-            return redirect()->route('scrapper.index')->with('message', 'data successfully scrapped');
+            return redirect()->route('scrapper.index')->with('message', 'data successfully imported');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'something went wrong! ' . $th->getMessage());
         }

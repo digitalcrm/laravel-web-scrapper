@@ -7,8 +7,13 @@
             </span>
         </button>
 
-        <a href="{{ route('scrapper.create') }}" type="button"
-            class="btn btn-primary float-end ms-2">Import Jobs</a>
+        @if(request('site') == 'jobbank')
+            <a href="{{ route('scrapper.create',['site'=>'jobbank']) }}"
+                type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
+        @else
+            <a href="{{ route('scrapper.create') }}"
+                type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
+        @endif
 
         @if($scrapper->total() > 0)
             <button wire:click="exportJobs" class="btn btn-outline-secondary float-end">

@@ -13,6 +13,11 @@
                     :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
                     {{ __('Bayt Jobs') }}
                 </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['site' => 'jobbank'])"
+                    :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
+                    {{ __('JobBank Jobs') }}
+                </x-buttons.side-link-button>
             </x-buttons.dropdown-side-link-button>
         </ul>
     </div>
