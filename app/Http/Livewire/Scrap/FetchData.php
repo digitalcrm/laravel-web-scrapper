@@ -85,6 +85,7 @@ class FetchData extends Component
                             'job_company' => $this->results[2],
                             'job_state' => $this->results[3],
                             'job_type' => $this->results[4],
+                            'site_name' => Scrap::SITE_BAYT,
                         ]
                     );
                 });

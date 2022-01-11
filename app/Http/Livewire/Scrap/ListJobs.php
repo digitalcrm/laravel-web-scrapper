@@ -11,6 +11,8 @@ class ListJobs extends Component
 {
     use WithPagination;
 
+    public $queryType = null;
+
     protected $paginationTheme = 'bootstrap';
 
     public function exportJobs($value = null)
@@ -18,13 +20,18 @@ class ListJobs extends Component
         return (new JobExport($value))->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
     }
 
+    public function mount()
+    {
+        if (request('site')) {
+            $this->queryType = request('site');
+        } else {
+            $this->queryType = Scrap::SITE_BAYT;
+        }
+    }
+
     public function render()
     {
-        if (request('site') == 'jobbank') {
-            $scrapper = Scrap::where('country_id', 3)->latest()->paginate(Scrap::PAGINATE_VALUE)->WithQueryString();
-        } else {
-            $scrapper = Scrap::where('country_id', '!=' ,3)->latest()->paginate(Scrap::PAGINATE_VALUE)->WithQueryString();
-        }
+        $scrapper = Scrap::where('site_name', $this->queryType)->latest()->paginate(Scrap::PAGINATE_VALUE)->withQueryString();
 
         return view('livewire.scrap.list-jobs', compact('scrapper'));
     }

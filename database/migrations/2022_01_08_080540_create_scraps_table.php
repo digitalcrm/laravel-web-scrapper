@@ -32,6 +32,8 @@ class CreateScrapsTable extends Migration
             $table->string('job_duration')->nullable();
             $table->string('job_skills')->nullable();
             $table->string('job_tags')->nullable();
+            $table->date('job_posted')->nullable();
+            $table->string('site_name')->nullable();
             $table->timestamps();
         });
     }

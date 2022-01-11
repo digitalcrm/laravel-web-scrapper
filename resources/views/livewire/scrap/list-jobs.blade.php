@@ -7,13 +7,8 @@
             </span>
         </button>
 
-        @if(request('site') == 'jobbank')
-            <a href="{{ route('scrapper.create',['site'=>'jobbank']) }}"
-                type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
-        @else
-            <a href="{{ route('scrapper.create') }}"
-                type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
-        @endif
+        <a href="{{ route('scrapper.create',['site'=>$this->queryType]) }}"
+            type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
 
         @if($scrapper->total() > 0)
             <button wire:click="exportJobs" class="btn btn-outline-secondary float-end">
@@ -67,6 +62,12 @@
                         <th>
                             Company
                         </th>
+                        <th>
+                            Job Posted
+                        </th>
+                        <th>
+                            Site Name
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,10 +97,16 @@
                             <td>
                                 {{ optional($scrap)->job_company }}
                             </td>
+                            <td>
+                                {{ optional($scrap)->job_posted }}
+                            </td>
+                            <td>
+                                {{ optional($scrap)->site_name }}
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td class="text-center" colspan="8">
+                            <td class="text-center" colspan="10">
                                 No Data Found
                             </td>
                         </tr>

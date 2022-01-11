@@ -59,11 +59,12 @@ class FetchJobbankData extends Component
                             'job_state' => $city,
                             'job_type' => null,
                             'job_salary_range' => $salary,
+                            'site_name' => Scrap::SITE_JOBBANK,
                         ]
                     );
                 });
             }
-            return redirect()->route('scrapper.index',['site' => 'jobbank'])->with('message', 'data successfully imported');
+            return redirect()->route('scrapper.index',['site' => Scrap::SITE_JOBBANK])->with('message', 'data successfully imported');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'something went wrong! ' . $th->getMessage());
         }

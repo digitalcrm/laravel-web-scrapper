@@ -8,6 +8,8 @@
         <div class="card-body">
             @if(request('site') == 'jobbank')
                 <livewire:scrap.fetch-jobbank-data />
+            @elseif(request('site') == 'linkedin')
+                <livewire:scrap.fetch-linkedin-data />
             @else
                 <livewire:scrap.fetch-data />
             @endif

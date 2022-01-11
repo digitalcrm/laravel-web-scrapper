@@ -30,9 +30,18 @@ class Scrap extends Model
         'job_skills',
         'job_salary_range', // salary range
         'job_tags',
+        'job_posted',
+        'site_name',
+    ];
+
+    protected $casts = [
+        'job_posted' => 'datetime',
     ];
 
     const PAGINATE_VALUE = 10;
+    const SITE_LINKEDIN = 'linkedin';
+    const SITE_BAYT = 'bayt';
+    const SITE_JOBBANK = 'jobbank';
 
     public function getSlugOptions(): SlugOptions
     {
