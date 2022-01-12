@@ -23,6 +23,31 @@
                     :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
                     {{ __('LinkedIn Jobs') }}
                 </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.import')"
+                    :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.import')">
+                    {{ __('Import Jobs using csv') }}
+                </x-buttons.side-link-button>
+            </x-buttons.dropdown-side-link-button>
+
+            <x-buttons.side-link-button :href="route('reports')" :active="request()->routeIs('reports')">
+                {{ __('Reports') }}
+            </x-buttons.side-link-button>
+
+            {{-- settings --}}
+            <x-buttons.dropdown-side-link-button :id="__('settings')" :name="__('Setting')"
+                :active="request()->routeIs('settings')">
+
+                <x-buttons.side-link-button :id="__('settings')" :collaspe="__('true')" :href="url('settings/cron')"
+                    :show="request()->routeIs('settings')" :active="request()->is('settings/cron')">
+                    {{ __('Cron') }}
+                </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('settings')" :collaspe="__('true')" :href="url('settings/vpn')"
+                    :show="request()->routeIs('settings')" :active="request()->is('settings/vpn')">
+                    {{ __('Vpn') }}
+                </x-buttons.side-link-button>
+
             </x-buttons.dropdown-side-link-button>
         </ul>
     </div>

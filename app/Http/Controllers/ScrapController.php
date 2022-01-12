@@ -83,4 +83,9 @@ class ScrapController extends Controller
     {
         // 
     }
+
+    public function jobImport()
+    {
+        return view('scrap.import');
+    }
 }

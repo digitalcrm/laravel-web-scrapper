@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScrapController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +25,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('scrapper', ScrapController::class)->only('index', 'create');
+Route::get('import/jobs', [ScrapController::class, 'jobImport'])->name('scrapper.import');
+
+Route::get('reports', [ReportController::class, 'index'])->name('reports');
+
+Route::get('settings/{value?}', [SettingController::class, 'index'])->name('settings');
 
 require __DIR__.'/auth.php';
