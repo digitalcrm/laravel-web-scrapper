@@ -65,7 +65,7 @@
                         <th>
                             Job Posted
                         </th>
-                        <th>
+                        <th class="visually-hidden">
                             Site Name
                         </th>
                     </tr>
@@ -98,9 +98,9 @@
                                 {{ optional($scrap)->job_company }}
                             </td>
                             <td>
-                                {{ optional($scrap)->job_posted }}
+                                {{ optional($scrap->job_posted)->isoFormat('DD-MM-YYYY') }}
                             </td>
-                            <td>
+                            <td class="visually-hidden">
                                 {{ optional($scrap)->site_name }}
                             </td>
                         </tr>
