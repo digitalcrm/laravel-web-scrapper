@@ -31,7 +31,12 @@ class ListJobs extends Component
 
     public function render()
     {
-        $scrapper = Scrap::where('site_name', $this->queryType)->latest()->paginate(Scrap::PAGINATE_VALUE)->withQueryString();
+        $scrapper = Scrap::where('site_name', $this->queryType)
+            ->whereNotNull('job_short_description')
+            ->whereNotNull('job_description')
+            ->latest()
+            ->paginate(Scrap::PAGINATE_VALUE)
+            ->withQueryString();
 
         return view('livewire.scrap.list-jobs', compact('scrapper'));
     }

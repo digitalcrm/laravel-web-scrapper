@@ -28,7 +28,11 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
      */
     public function collection()
     {
-        return Scrap::with('country')->select($this->selectedColumn())->get();
+        return Scrap::with('country')
+            ->whereNotNull('job_short_description')
+            ->whereNotNull('job_description')
+            ->select($this->selectedColumn())
+            ->get();
     }
 
     public function map($job): array

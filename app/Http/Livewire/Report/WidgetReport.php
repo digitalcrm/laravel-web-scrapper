@@ -14,17 +14,26 @@ class WidgetReport extends Component
     {
         switch ($value) {
             case Scrap::SITE_BAYT:
-                $jobs = Scrap::where('site_name', $value)->count();
+                $jobs = Scrap::where('site_name', $value)
+                    ->whereNotNull('job_short_description')
+                    ->whereNotNull('job_description')
+                    ->count();
                 return $jobs;
                 break;
 
             case Scrap::SITE_LINKEDIN:
-                $jobs = Scrap::where('site_name', $value)->count();
+                $jobs = Scrap::where('site_name', $value)
+                    ->whereNotNull('job_short_description')
+                    ->whereNotNull('job_description')
+                    ->count();
                 return $jobs;
                 break;
 
             case Scrap::SITE_JOBBANK:
-                $jobs = Scrap::where('site_name', $value)->count();
+                $jobs = Scrap::where('site_name', $value)
+                    ->whereNotNull('job_short_description')
+                    ->whereNotNull('job_description')
+                    ->count();
                 return $jobs;
                 break;
 
