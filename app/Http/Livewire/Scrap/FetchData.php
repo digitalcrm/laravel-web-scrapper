@@ -70,8 +70,11 @@ class FetchData extends Component
 
                     $crawler_detail = $client->request('GET', $job_detail_link);
 
-                    if ($crawler_detail->filter('#job_card > .card-head > .is-reversed > .t-left > .list > li')->count() > 0) {
-                        $job_posted = $crawler_detail->filter('#job_card > .card-head > .is-reversed > .t-left > .list > .t-mute > .u-none')->text();
+                    if ($crawler_detail->filter('.t-left > .list > li')->count() > 0) {
+                        $date = $crawler_detail->filter('.t-left > .list > .t-mute')->text();
+                        if (Str::contains($date, 'Date Posted:')) {
+                            $job_posted = $crawler_detail->filter('.t-left > .list > .t-mute > span')->text();
+                        }
                     } else {
                         $job_posted = null;
                     }
