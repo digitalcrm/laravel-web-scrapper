@@ -6,21 +6,13 @@ use Goutte\Client;
 use App\Models\Scrap;
 use App\Models\Country;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class FetchData extends Component
 {
     public $country = 1;
 
     public $site_url = 'https://www.bayt.com/en/uae/jobs';
-    
-    private $results = [
-        'job_title',
-        'job_description',
-        'job_company',
-        'job_state',
-        'job_type',
-        // 'job_salary_range',
-    ];
 
     public function updatedCountry()
     {
@@ -46,46 +38,65 @@ class FetchData extends Component
             $pages = ($crawler->filter('#sectionPagination ul li')->count() > 0)
                 ? $crawler->filter('#sectionPagination #pagination li:nth-last-child(2)')->text()
                 : 0;
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 1; $i < 5; $i++) {
                 if ($i != 0) {
                     $crawler = $client->request('GET', $url . '/?page=' . $i);
                 }
-                $crawler->filter('.has-pointer-d')->each(function ($node) {
+                $crawler->filter('.has-pointer-d')->each(function ($node) use($client) {
 
-                    $this->results[0] = $node->filter('h2')->text(); // title
+                    $title = $node->filter('h2')->text(); // title
 
+                    $job_detail_link = $node->selectLink($title)->link()->getUri();
+                    
                     if (!empty($node->filter('.t-small p'))) {
-                        $this->results[1] = $node->filter('.t-small p')->text();
+                        $job_short_description = $node->filter('.t-small p')->text();
                     } else {
-                        $this->results[1] = null;
+                        $job_short_description = null;
                     }
 
                     if (!empty($node->filter('p10r'))) {
-                        $this->results[2] = explode('-', $node->filter('.p10r')->text())[0];
-                        $this->results[3] = explode('-', $node->filter('.p10r')->text())[1];
+                        $job_company = explode('-', $node->filter('.p10r')->text())[0];
+                        $job_state = explode('-', $node->filter('.p10r')->text())[1];
                     } else {
-                        $this->results[2] = null;
-                        $this->results[3] = null;
+                        $job_company = null;
+                        $job_state = null;
                     }
 
                     if (($node->filter('div.t-small > ul')->count()) > 0) {
-                        $this->results[4] = $node->filter('div.t-small > ul > li')->text();
+                        $job_type = $node->filter('div.t-small > ul > li')->text();
                     } else {
-                        $this->results[4] = null;
-                        // $this->results[5] = null;
+                        $job_type = null;
+                    }
+
+                    $crawler_detail = $client->request('GET', $job_detail_link);
+
+                    if ($crawler_detail->filter('#job_card > .card-head > .is-reversed > .t-left > .list > li')->count() > 0) {
+                        $job_posted = $crawler_detail->filter('#job_card > .card-head > .is-reversed > .t-left > .list > .t-mute > .u-none')->text();
+                    } else {
+                        $job_posted = null;
+                    }
+                    
+                    if ($crawler_detail->filter('#job_card > .is-spaced')->count() > 0) {
+                        $text = $crawler_detail->filter('#job_card > .is-spaced')->text();
+                        if(Str::contains($text, 'Job Description')){
+                            $job_description = $crawler_detail->filter('#job_card > .is-spaced > div')->text();
+                        }
+                    } else {
+                        $job_description = $job_short_description;
                     }
 
                     Scrap::updateOrCreate(
-                        ['job_title' => $this->results[0]],
+                        ['job_title' => $title],
                         [
-                            'job_title' => $this->results[0],
-                            'country_id' => $this->country, // country id store
-                            'job_short_description' => $this->results[1],
-                            'job_description' => $this->results[1],
-                            'job_company' => $this->results[2],
-                            'job_state' => $this->results[3],
-                            'job_type' => $this->results[4],
-                            'site_name' => Scrap::SITE_BAYT,
+                            'job_title'             => $title,
+                            'country_id'            => $this->country, // country id store
+                            'job_short_description' => $job_short_description,
+                            'job_description'       => $job_description,
+                            'job_company'           => $job_company,
+                            'job_state'             => $job_state,
+                            'job_type'              => $job_type,
+                            'job_posted'            => $job_posted,
+                            'site_name'             => Scrap::SITE_BAYT,
                         ]
                     );
                 });

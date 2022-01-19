@@ -40,6 +40,7 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
                 $job->job_short_description,
                 $job->job_description,
                 $job->job_type,
+                $job->job_posted,
             ];
         } else {
             return [
@@ -49,6 +50,7 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
                 $job->job_short_description,
                 $job->job_description,
                 $job->job_type,
+                $job->job_posted,
             ];
         }
     }
@@ -69,11 +71,11 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
     {
         if ($this->type == 'ejobsite') {
             return [
-                'job_title', 'country_id', 'job_short_description', 'job_description', 'job_type'
+                'job_title', 'country_id', 'job_short_description', 'job_description', 'job_type', 'job_posted'
             ];
         } else {
             return [
-                'job_title', 'country_id', 'job_state', 'job_short_description', 'job_description', 'job_type'
+                'job_title', 'country_id', 'job_state', 'job_short_description', 'job_description', 'job_type', 'job_posted'
             ];
         }
     }
@@ -82,11 +84,11 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
     {
         if ($this->type == 'ejobsite') {
             return [
-                'job_title', 'job_country', 'job_short_description', 'job_description', 'job_type'
+                'job_title', 'job_country', 'job_short_description', 'job_description', 'job_type', 'inserted'
             ];
         } else {
             return [
-                'job_title', 'job_country', 'job_city', 'job_short_description', 'job_description', 'job_type'
+                'job_title', 'job_country', 'job_city', 'job_short_description', 'job_description', 'job_type', 'job_posted'
             ];
         }
     }
