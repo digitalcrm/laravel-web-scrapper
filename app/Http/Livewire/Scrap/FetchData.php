@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Scrap;
 use Goutte\Client;
 use App\Models\Scrap;
 use App\Models\Country;
+use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class FetchData extends Component
@@ -18,7 +20,7 @@ class FetchData extends Component
     {
         if ($this->country) {
             $countryName = Country::findOrFail($this->country);
-            $this->site_url = 'https://www.bayt.com/en/'.$countryName->slug.'/jobs/';
+            $this->site_url = 'https://www.bayt.com/en/' . $countryName->slug . '/jobs/';
         }
     }
 
@@ -27,6 +29,8 @@ class FetchData extends Component
         $validateData = $this->validate([
             'site_url' => ['required', 'url'],
         ]);
+
+        $dataCollection = collect();
 
         try {
             $client = new Client();
@@ -38,16 +42,16 @@ class FetchData extends Component
             $pages = ($crawler->filter('#sectionPagination ul li')->count() > 0)
                 ? $crawler->filter('#sectionPagination #pagination li:nth-last-child(2)')->text()
                 : 0;
-            for ($i = 1; $i < 5; $i++) {
+            for ($i = 1; $i < 2; $i++) {
                 if ($i != 0) {
                     $crawler = $client->request('GET', $url . '/?page=' . $i);
                 }
-                $crawler->filter('.has-pointer-d')->each(function ($node) use($client) {
+                $crawler->filter('.has-pointer-d')->each(function ($node) use ($client, $dataCollection) {
 
                     $title = $node->filter('h2')->text(); // title
 
                     $job_detail_link = $node->selectLink($title)->link()->getUri();
-                    
+
                     if (!empty($node->filter('.t-small p'))) {
                         $job_short_description = $node->filter('.t-small p')->text();
                     } else {
@@ -73,23 +77,24 @@ class FetchData extends Component
                     if ($crawler_detail->filter('.t-left > .list > li')->count() > 0) {
                         $date = $crawler_detail->filter('.t-left > .list > .t-mute')->text();
                         if (Str::contains($date, 'Date Posted:')) {
-                            $job_posted = $crawler_detail->filter('.t-left > .list > .t-mute > span')->text();
+                            // $job_posted = $crawler_detail->filter('.t-left > .list > .t-mute > span')->text();
+                            $date = $crawler_detail->filter('.t-left > .list > .t-mute > span')->text();
+                            $job_posted = Carbon::parse($date);
                         }
                     } else {
                         $job_posted = null;
                     }
-                    
+
                     if ($crawler_detail->filter('#job_card > .is-spaced')->count() > 0) {
                         $text = $crawler_detail->filter('#job_card > .is-spaced')->text();
-                        if(Str::contains($text, 'Job Description')){
+                        if (Str::contains($text, 'Job Description')) {
                             $job_description = $crawler_detail->filter('#job_card > .is-spaced > div')->text();
                         }
                     } else {
                         $job_description = $job_short_description;
                     }
 
-                    Scrap::updateOrCreate(
-                        ['job_title' => $title],
+                    $dataCollection->push(
                         [
                             'job_title'             => $title,
                             'country_id'            => $this->country, // country id store
@@ -102,6 +107,42 @@ class FetchData extends Component
                             'site_name'             => Scrap::SITE_BAYT,
                         ]
                     );
+                    // Scrap::updateOrCreate(
+                    //     ['job_title' => $title],
+                    //     [
+                    //         'job_title'             => $title,
+                    //         'country_id'            => $this->country, // country id store
+                    //         'job_short_description' => $job_short_description,
+                    //         'job_description'       => $job_description,
+                    //         'job_company'           => $job_company,
+                    //         'job_state'             => $job_state,
+                    //         'job_type'              => $job_type,
+                    //         'job_posted'            => $job_posted,
+                    //         'site_name'             => Scrap::SITE_BAYT,
+                    //     ]
+                    // );
+                    $dataCollection->map(function (array $row) {
+                        return Arr::only($row, [
+                            'job_title',
+                            'country_id',
+                            'job_short_description',
+                            'job_description',
+                            'job_company',
+                            'job_state',
+                            'job_type',
+                            'job_posted',
+                            'site_name'
+                        ]);
+                    })
+                        ->chunk(100)
+                        ->each(function ($chunk) {
+                            // dd($chunk[$key]['job_title']);
+                            // Scrap::updateOrCreate(
+                            //     ['job_title' => $chunk[$key]['job_title']],
+                            //     $chunk->all()
+                            // );
+                            Scrap::upsert($chunk->all(), 'job_title');
+                        });
                 });
             }
             return redirect()->route('scrapper.index')->with('message', 'data successfully imported');
@@ -113,7 +154,7 @@ class FetchData extends Component
     public function render()
     {
         $countries = Country::select('id', 'name', 'slug')->get();
-        
+
         return view('livewire.scrap.fetch-data', compact('countries'));
     }
 }
