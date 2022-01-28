@@ -14,6 +14,8 @@ class FetchSiteJobs extends Command
     public $country = 1;
 
     public $site_url = 'https://www.bayt.com/en/uae/jobs';
+
+    public $pages = 50;
     /**
      * The name and signature of the console command.
      *
@@ -45,7 +47,7 @@ class FetchSiteJobs extends Command
      */
     public function handle()
     {
-        $bar = $this->output->createProgressBar(5);
+        $bar = $this->output->createProgressBar($this->pages);
 
         $bar->start();
 
@@ -67,7 +69,7 @@ class FetchSiteJobs extends Command
 
         $crawler = $client->request('GET', $url);
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < $this->pages; $i++) {
             if ($i != 0) {
                 $crawler = $client->request('GET', $url . '/?page=' . $i);
             }
