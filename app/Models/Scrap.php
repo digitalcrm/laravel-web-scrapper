@@ -15,6 +15,7 @@ class Scrap extends Model
     protected $fillable = [
         'job_title',
         'slug',
+        'job_site_url',
         'job_reference',
         'country_id', // country
         'job_state', // or city

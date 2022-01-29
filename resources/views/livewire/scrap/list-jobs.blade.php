@@ -45,6 +45,9 @@
                             Job Title
                         </th>
                         <th>
+                            URL
+                        </th>
+                        <th>
                             Job Country
                         </th>
                         <th>
@@ -78,6 +81,9 @@
                             </td>
                             <td>
                                 {{ optional($scrap)->job_title }}
+                            </td>
+                            <td>
+                                <a href="{{ optional($scrap)->job_site_url }}" target="_new" rel="noopener">click here</a>
                             </td>
                             <td>
                                 {{ optional($scrap->country)->name }}
