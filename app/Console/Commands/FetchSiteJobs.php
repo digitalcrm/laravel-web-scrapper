@@ -44,28 +44,40 @@ class FetchSiteJobs extends Command
      */
     public function handle()
     {
+        $siteName = $this->choice(
+            'Which sites jobs do you want to fetch?',
+            ['bayt', 'linkedin', 'jobbank'],
+            0,
+            $maxAttempts = null,
+            $allowMultipleSelections = false
+        );
+
         $pages = $this->ask('How many pages do you want to scroll? [10, 20, 50 etc...]');
 
-        if ($this->confirm('Do you wish to continue? [pages: ' . $pages . ']', true)) {
+        if ($this->confirm('Do you wish to continue? [site: ' .$siteName . ' and pages: ' . $pages . ']', true)) {
             $bar = $this->output->createProgressBar($pages);
 
             $bar->start();
 
-            if ($this->option('bayt')) {
-                $this->baytJobs($bar, $pages);
-            } elseif ($this->option('linkedin')) {
-                $this->linkedInJobs($bar, $pages);
-            } elseif ($this->option('jobbank')) {
-                $this->jobbankJobs($bar, $pages);
-            } else {
-                $this->baytJobs($bar, $pages);
-                /*
-                    $siteName = $this->ask('Enter Site Name such as [bayt, linkedin, jobbank]');
-                    $pages = $this->ask('Wrap Data up to pages [10, 20, 50 etc...]');
-                    if ($this->confirm('Do you wish to continue?[ Site: '.$siteName.', Pages: '.$pages.']')) {
-                        $this->jobsFor($bar, $siteName, $pages);
-                    }
-                */
+            // if ($this->option('bayt')) {
+            //     $this->baytJobs($bar, $pages);
+            // } elseif ($this->option('linkedin')) {
+            //     $this->linkedInJobs($bar, $pages);
+            // } elseif ($this->option('jobbank')) {
+            //     $this->jobbankJobs($bar, $pages);
+            // } else {
+            //     $this->baytJobs($bar, $pages);
+            // }
+            switch ($siteName) {
+                case 'bayt':
+                    $this->baytJobs($bar, $pages);
+                    break;
+                case 'bayt':
+                    $this->linkedInJobs($bar, $pages);
+                    break;
+                case 'bayt':
+                    $this->jobbankJobs($bar, $pages);
+                    break;
             }
 
             $bar->finish();
