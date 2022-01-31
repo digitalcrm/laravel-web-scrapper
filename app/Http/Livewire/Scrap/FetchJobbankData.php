@@ -26,7 +26,7 @@ class FetchJobbankData extends Component
 
             $crawler = $client->request('GET', $url);
 
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 if ($i != 0) {
                     $crawler = $client->request('GET', $url . '/?page=' . $i);
                 }
@@ -64,7 +64,7 @@ class FetchJobbankData extends Component
                     );
                 });
             }
-            return redirect()->route('scrapper.index',['site' => Scrap::SITE_JOBBANK])->with('message', 'data successfully imported');
+            return redirect()->route('scrapper.index', ['filter[site_name]' => Scrap::SITE_JOBBANK])->with('message', 'data successfully imported');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'something went wrong! ' . $th->getMessage());
         }

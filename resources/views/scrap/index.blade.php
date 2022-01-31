@@ -1,12 +1,8 @@
 <x-layout>
     <div class="col-12">
-        @if(request('site') == App\Models\Scrap::SITE_LINKEDIN)
-            <h3>{{ App\Models\Scrap::SITE_LINKEDIN }}</h3>
-        @elseif(request('site') == App\Models\Scrap::SITE_JOBBANK)
-            <h3>{{ App\Models\Scrap::SITE_JOBBANK }}</h3>
-        @else
-            <h3>{{ App\Models\Scrap::SITE_BAYT }}</h3>
-        @endif
+        <h3>
+            {{ $heading }}
+        </h3>
     </div>
     <x-alert />
     <livewire:scrap.list-jobs />

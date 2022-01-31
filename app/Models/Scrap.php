@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Scrap extends Model
 {
@@ -39,7 +40,7 @@ class Scrap extends Model
         'job_posted' => 'datetime',
     ];
 
-    const PAGINATE_VALUE = 10;
+    const PAGINATE_VALUE = 100;
     const SITE_LINKEDIN = 'linkedin';
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';
@@ -54,5 +55,21 @@ class Scrap extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function jobDescription()
+    {
+
+        $data = $this->job_description ? Str::limit($this->job_description, 50, '...') : '';
+        
+        return $data;
+    }
+
+    public function jobShortDescription()
+    {
+
+        $data = $this->job_description ? Str::limit($this->job_description, 25, '...') : '';
+        
+        return $data;
     }
 }

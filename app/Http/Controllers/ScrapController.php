@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Scrap;
 use Goutte\Client;
+use App\Models\Scrap;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ScrapController extends Controller
@@ -15,7 +17,14 @@ class ScrapController extends Controller
 
     public function index()
     {
-        return view('scrap.index');
+        $requestName = request()->query('filter');
+        if ($requestName && Arr::exists($requestName, 'site_name')) {
+            $heading = Str::upper($requestName['site_name']);
+        } else {
+            $heading = 'All Jobs';
+        }
+
+        return view('scrap.index', compact('heading'));
     }
 
     public function create()
