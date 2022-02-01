@@ -10,18 +10,18 @@ use Illuminate\Support\Str;
 
 trait JobSiteTrait
 {
-    public $bayt_url = 'https://www.bayt.com/en/uae/jobs';
-    public $linkedin_url = 'https://www.linkedin.com/jobs/search?keywords=&location=ind';
-    public $jobbank_url = 'https://www.jobbank.gc.ca/jobsearch/jobsearch';
+    // public $bayt_url = 'https://www.bayt.com/en/uae/jobs';
+    // public $linkedin_url = 'https://www.linkedin.com/jobs/search?keywords=&location=ind';
+    // public $jobbank_url = 'https://www.jobbank.gc.ca/jobsearch/jobsearch';
+    // public $country = 1;
 
-    public $country = 1;
-
-    public function baytJobs($bar = null, int $pages = 50)
+    public function baytJobs($bar = null, int $pages = 50, int $countryId, string $countryName = 'uae')
     {
         $dataCollection = collect();
 
-        $url = $this->bayt_url;
+        $url = 'https://www.bayt.com/en/'.$countryName.'/jobs';
 
+        
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -36,7 +36,7 @@ trait JobSiteTrait
             if ($bar) {
             }
 
-            $crawler->filter('.has-pointer-d')->each(function ($node) use ($client, $dataCollection) {
+            $crawler->filter('.has-pointer-d')->each(function ($node) use ($client, $dataCollection, $countryId) {
 
                 $title = $node->filter('h2')->text(); // title
 
@@ -87,7 +87,7 @@ trait JobSiteTrait
                 $dataCollection->push(
                     [
                         'job_title'             => $title,
-                        'country_id'            => $this->country, // country id store
+                        'country_id'            => $countryId, // country id store
                         'job_site_url'          => $job_detail_link,
                         'job_short_description' => $job_short_description,
                         'job_description'       => $job_description,
@@ -103,7 +103,7 @@ trait JobSiteTrait
                 //     ['job_title' => $title],
                 //     [
                 //         'job_title'             => $title,
-                //         'country_id'            => $this->country, // country id store
+                //         'country_id'            => $countryId, // country id store
                 //         'job_short_description' => $job_short_description,
                 //         'job_description'       => $job_description,
                 //         'job_company'           => $job_company,
@@ -127,12 +127,12 @@ trait JobSiteTrait
         }
     }
 
-    public function linkedInJobs($bar = null, int $pages = 50)
+    public function linkedInJobs($bar = null, int $pages = 50, int $countryId, string $countryName = 'uae')
     {
         $dataCollection = collect();
 
-        $url = $this->linkedin_url;
-
+        $url = 'https://www.linkedin.com/jobs/search?keywords=&location='.$countryName;
+        
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -147,7 +147,7 @@ trait JobSiteTrait
                 $bar->advance();
             }
 
-            $crawler->filter('.jobs-search__results-list > li')->each(function ($node) use ($client, $dataCollection) {
+            $crawler->filter('.jobs-search__results-list > li')->each(function ($node) use ($client, $dataCollection, $countryId) {
                 $title = $node->filter('.job-search-card > .base-search-card__info > h3')->text();
                 $company = $node->filter('.job-search-card > .base-search-card__info > h4')->text();
                 $location = $node->filter('.job-search-card > .base-search-card__info > .base-search-card__metadata > span')->text();
@@ -182,7 +182,7 @@ trait JobSiteTrait
                 $dataCollection->push(
                     [
                         'job_title' => $title,
-                        'country_id' => $this->country, // country id store
+                        'country_id' => $countryId, // country id store
                         'job_site_url' => $job_detail_link,
                         'job_short_description' => Str::limit($description, 55),
                         'job_description' => $description,
@@ -207,12 +207,12 @@ trait JobSiteTrait
         }
     }
 
-    public function jobbankJobs($bar = null, int $pages = 50)
+    public function jobbankJobs($bar = null, int $pages = 50, int $countryId, string $countryName = 'canada')
     {
         $dataCollection = collect();
 
-        $url = $this->jobbank_url;
-
+        $url = 'https://www.jobbank.gc.ca/jobsearch/jobsearch';
+        
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -227,7 +227,7 @@ trait JobSiteTrait
                 $bar->advance();
             }
 
-            $crawler->filter('article')->each(function ($node) use ($client, $dataCollection) {
+            $crawler->filter('article')->each(function ($node) use ($client, $dataCollection, $countryId) {
                 
                 $linkUrl = $node->filter('a')->text();
 
@@ -281,7 +281,7 @@ trait JobSiteTrait
                 $dataCollection->push(
                     [
                         'job_title' => $title,
-                        'country_id' => $this->country, // country id store
+                        'country_id' => $countryId, // country id store
                         'job_site_url' => $job_detail_link,
                         'job_short_description' => $short_description,
                         'job_description' => $description,

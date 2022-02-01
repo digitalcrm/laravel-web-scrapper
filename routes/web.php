@@ -25,7 +25,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::resource('scrapper', ScrapController::class)->only('index');
+Route::resource('scrapper', ScrapController::class)->only('index', 'create');
 Route::get('import/jobs', [ScrapController::class, 'jobImport'])->name('scrapper.import');
 
 Route::get('reports', [ReportController::class, 'index'])->name('reports');

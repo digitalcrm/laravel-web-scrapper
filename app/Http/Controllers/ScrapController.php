@@ -7,6 +7,7 @@ use App\Models\Scrap;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class ScrapController extends Controller
 {
@@ -29,6 +30,8 @@ class ScrapController extends Controller
 
     public function create()
     {
+        abort_if(! App::environment('local'), 403);
+
         return view('scrap.create');
     }
 
