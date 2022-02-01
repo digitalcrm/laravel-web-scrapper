@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Traits\JobSiteTrait;
+use App\Models\Country;
 use App\Models\Scrap;
 use Illuminate\Console\Command;
 
@@ -15,10 +16,7 @@ class FetchSiteJobs extends Command
      *
      * @var string
      */
-    protected $signature = 'job:wrapping {pages=50}
-                            {--bayt : bayt jobs fetch}
-                            {--jobbank : jobbank jobs fetch}
-                            {--linkedin : linkedin jobs fetch}';
+    protected $signature = 'job:wrapping';
 
     /**
      * The console command description.
@@ -48,35 +46,44 @@ class FetchSiteJobs extends Command
             'Which sites jobs do you want to fetch?',
             ['bayt', 'linkedin', 'jobbank'],
             0,
-            $maxAttempts = null,
-            $allowMultipleSelections = false
         );
 
         $pages = $this->ask('How many pages do you want to scroll? [10, 20, 50 etc...]');
 
-        if ($this->confirm('Do you wish to continue? [site: ' .$siteName . ' and pages: ' . $pages . ']', true)) {
+        if ($siteName == 'jobbank') {
+            $countryId = $this->fetchCountry('canada');
+            $countryName = 'canada';
+        } elseif ($siteName == 'bayt') {
+            $countryName = $this->choice(
+                'select country',
+                ['uae', 'ind', 'canada'],
+                0,
+            );
+            $countryId = $this->fetchCountry($countryName);
+            $countryName = ($countryName == 'ind') ? 'india' : $countryName;
+        } else {
+            $countryName = $this->choice(
+                'select country',
+                ['uae', 'ind', 'canada'],
+                0,
+            );
+            $countryId = $this->fetchCountry($countryName);
+        }
+
+        if ($this->confirm('Do you wish to continue? [site: ' . $siteName . ', country: '.$countryName. ' and pages: ' . $pages . ']', true)) {
             $bar = $this->output->createProgressBar($pages);
 
             $bar->start();
 
-            // if ($this->option('bayt')) {
-            //     $this->baytJobs($bar, $pages);
-            // } elseif ($this->option('linkedin')) {
-            //     $this->linkedInJobs($bar, $pages);
-            // } elseif ($this->option('jobbank')) {
-            //     $this->jobbankJobs($bar, $pages);
-            // } else {
-            //     $this->baytJobs($bar, $pages);
-            // }
             switch ($siteName) {
                 case 'bayt':
-                    $this->baytJobs($bar, $pages);
+                    $this->baytJobs($bar, $pages, $countryId, $countryName);
                     break;
-                case 'bayt':
-                    $this->linkedInJobs($bar, $pages);
+                case 'linkedin':
+                    $this->linkedInJobs($bar, $pages, $countryId, $countryName);
                     break;
-                case 'bayt':
-                    $this->jobbankJobs($bar, $pages);
+                case 'jobbank':
+                    $this->jobbankJobs($bar, $pages, $countryId, $countryName);
                     break;
             }
 
@@ -88,22 +95,10 @@ class FetchSiteJobs extends Command
         }
     }
 
-    /*
-        protected function jobsFor($bar, $name, $pages)
-        {
-            switch ($name) {
-                case 'bayt':
-                    return $this->baytJobs($bar, $pages);
-                    break;
+    protected function fetchCountry(string $country_name): int
+    {
+        $country = Country::where('sortname', $country_name)->first();
 
-                case 'linkedin':
-                    return $this->linkedInJobs($bar, $pages);
-                    break;
-
-                case 'jobbank':
-                    return $this->jobbankJobs($bar, $pages);
-                    break;
-            }
-        }
-    */
+        return $country->id;
+    }
 }
