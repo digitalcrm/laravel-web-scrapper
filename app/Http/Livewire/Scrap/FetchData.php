@@ -145,7 +145,7 @@ class FetchData extends Component
                         });
                 });
             }
-            return redirect()->route('scrapper.index')->with('message', 'data successfully imported');
+            return redirect()->route('scrapper.index', ['filter[site_name]' => Scrap::SITE_BAYT])->with('message', 'data successfully imported');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'something went wrong! ' . $th->getMessage());
         }

@@ -9,19 +9,24 @@
             <x-buttons.dropdown-side-link-button :id="__('sites')" :name="__('Sites')"
                 :active="request()->routeIs('scrapper.*')">
 
-                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index')"
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['filter[site_name]' => 'bayt'])"
                     :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
                     {{ __('Bayt Jobs') }}
                 </x-buttons.side-link-button>
 
-                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['site' => 'jobbank'])"
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['filter[site_name]' => 'jobbank'])"
                     :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
                     {{ __('JobBank Jobs') }}
                 </x-buttons.side-link-button>
 
-                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['site' => 'linkedin'])"
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index', ['filter[site_name]' => 'linkedin'])"
                     :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
                     {{ __('LinkedIn Jobs') }}
+                </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.index')"
+                    :show="request()->routeIs('scrapper.*')" :active="request()->routeIs('scrapper.index')">
+                    {{ __('All Jobs') }}
                 </x-buttons.side-link-button>
 
                 <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')" :href="route('scrapper.import')"
@@ -32,6 +37,10 @@
 
             <x-buttons.side-link-button :href="route('reports')" :active="request()->routeIs('reports')">
                 {{ __('Reports') }}
+            </x-buttons.side-link-button>
+
+            <x-buttons.side-link-button :href="route('search.form')" :active="request()->routeIs('search.form')">
+                {{ __('Search') }}
             </x-buttons.side-link-button>
 
             {{-- settings --}}
