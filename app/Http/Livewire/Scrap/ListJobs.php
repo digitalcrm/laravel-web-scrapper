@@ -17,33 +17,10 @@ class ListJobs extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    // public $filter;
-
-    // protected $rules = [
-    //     'filter.job_title' => 'nullable|string|max:55',
-    //     'filter.job_state' => 'nullable|string|max:55',
-    // ];
-
-    // protected $messages = [
-    //     'formFields.job_title.required' => 'The name field is required',
-    //     'formFields.job_state.required' => 'The city field cannot be empty.',
-    // ];
-
-    public function exportJobs($value = null)
+    public function exportJobs(string $value = null)
     {
         return (new JobExport($value))->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
     }
-
-    // public function submitFilter()
-    // {
-    //     $validatedData = $this->validate();
-        
-    //     if ($validatedData) {
-    //         $url = route('scrapper.index', ['filter[site_name]' => $validatedData['filter']['job_title']]);
-
-    //         return redirect()->route('search.list', $validatedData);
-    //     }
-    // }
 
     public function mount()
     {

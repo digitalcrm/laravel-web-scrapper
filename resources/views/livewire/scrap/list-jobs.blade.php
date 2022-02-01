@@ -7,8 +7,10 @@
             </span>
         </button>
 
-        {{-- <a href="{{ route('scrapper.create',['site'=>$this->queryType]) }}"
-            type="button" class="btn btn-primary float-end ms-2">Import Jobs</a> --}}
+        @env('local')
+            <a href="{{ route('scrapper.create',['site'=>$this->queryType]) }}"
+            type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
+        @endenv
 
         @if($scrapper->total() > 0)
             <button wire:click="exportJobs" class="btn btn-outline-secondary float-end">
@@ -33,9 +35,6 @@
                 {{ __('Ejobsite Export') }}
             </button>
         @endif
-
-        {{-- <button type="button" class="btn btn-primary float-end me-2" data-bs-toggle="modal"
-            data-bs-target="#filterModal" data-bs-whatever="@mdo">Filter</button> --}}
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -122,39 +121,4 @@
             </div>
         </div>
     </div>
-
-    {{-- Modal --}}
-    {{-- <div wire:ignore.self class="modal fade" id="filterModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="filterModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="filterModalLabel">{{ __('Filter') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form wire:submit.prevent="submitFilter">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="job_title" class="col-form-label">Title:</label>
-                            <input wire:model="filter.job_title" type="text" class="form-control" id="job_title"
-                                name="job_title">
-                            @error('filter.job_title') <span class="error">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="job_state" class="col-form-label">City:</label>
-                            <input wire:model="filter.job_state" type="text" class="form-control" id="job_state"
-                                name="job_state">
-                            @error('filter.job_state') <span class="error">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">{{ __('Apply') }}</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div> --}}
-    {{-- Modal End --}}
 </div>
