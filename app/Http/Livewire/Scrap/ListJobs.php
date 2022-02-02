@@ -43,7 +43,7 @@ class ListJobs extends Component
 
         $scrapper = QueryBuilder::for(Scrap::class)
             ->allowedFilters(['job_title', 'site_name', 'job_company', 'job_state', 'country_id', 'job_type'])
-            ->latest()
+            ->latest('job_posted')
             ->paginate(Scrap::PAGINATE_VALUE)
             ->appends(request()->query())
             ->withQueryString();

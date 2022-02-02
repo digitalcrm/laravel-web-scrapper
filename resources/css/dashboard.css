@@ -1,6 +1,6 @@
 body {
     font-size: .875rem;
-}
+}	tr {		vertical-align: middle!important;	}	a {		text-decoration:none!important;		color:#2557a7!important;	}
 
 .feather {
     width: 16px;

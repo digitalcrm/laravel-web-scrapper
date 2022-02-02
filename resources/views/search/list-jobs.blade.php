@@ -1,32 +1,40 @@
 <x-layout>
+<style>
+	tr {
+		vertical-align: middle;
+	}
+	a {
+		text-decoration:none;
+		color:#2557a7;
+	}	
+</style>
+
     <div class="col-12">
         <h3>
-            {{ __('Search List') }}
-        </h3>
-    </div>
-    <x-alert />
-    <div class="card">
-        <div class="card-header">
-            <button type="button" class="btn btn-info position-relative">
+            {{ $heading ? $heading : 'Search Result' }}
+        
+		<button type="button" class="btn btn-default border position-relative">
                 Total
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {{ $jobs->total() }}
                 </span>
-            </button>
-        </div>
-        <div class="card-body">
+            </button></h3>
+    </div>
+    <x-alert />
+    <div class="card">
+        <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>
+                            <th class="text-center" width="10%">Sr. No.</th>
+                            <th width="40%">
                                 Job Title
                             </th>
                             <th>
-                                Job Country
+                                Country
                             </th>
-                            <th>
+                            <th width="20%">
                                 State
                             </th>
                             <th>
@@ -35,13 +43,13 @@
                             <th>
                                 Description
                             </th>
-                            <th>
+                            <th width="10%">
                                 Job Type
                             </th>
                             <th>
                                 Company
                             </th>
-                            <th>
+                            <th width="12%">
                                 Job Posted
                             </th>
                             <th class="visually-hidden">
@@ -52,7 +60,7 @@
                     <tbody>
                         @forelse($jobs as $scrap)
                             <tr>
-                                <td>
+                                <td class="text-center">
                                     {{ $loop->index + 1 }}
                                 </td>
                                 <td>
