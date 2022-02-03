@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="card-body pt-2 pb-4 d-flex align-items-center">
-                    <div class="d-flex flex-center pt-2">
-                        <div id="kt_card_widget_4_chart" style="min-width: 100%; min-height: 70px" data-kt-size="70"
+                    <div class="d-flex flex-center me-5 pt-2">
+                        <div id="kt_card_widget_4_chart" style="min-width: ; min-height: 70px" data-kt-size="70"
                             data-kt-line="11"></div>
                     </div>
                     <div class="d-flex flex-column content-justify-center w-100">

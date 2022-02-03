@@ -46,7 +46,7 @@
                     </div>
                     <div class="card-footer">
                         <button type="submit" wire:loading.attr="disabled" {{ $filter ? '' : 'disabled' }}
-                            class="btn btn-primary float-end m-2 px-4">
+                            class="btn btn-primary float-end m-2">
                             {{ __('Apply') }}
                         </button>
                     </div>

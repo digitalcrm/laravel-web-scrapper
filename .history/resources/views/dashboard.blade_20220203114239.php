@@ -2,10 +2,10 @@
 
     $data = [
     ["img" => "https://cricketu.com/images/usa.png", "name" => "USA"],
-    ["img" => "https://cricketu.com/images/canada.png", "name" => "Canada"],
-    ["img" => "https://cricketu.com/images/uae.png", "name" => "UAE"],
-    ["img" => "https://cricketu.com/images/uk.png", "name" => "UK"],
-    ["img" => "https://cricketu.com/images/india.png", "name" => "India"],
+    ["img" => "https://cricketu.com/images/canada.png", "name" => "canada"],
+    ["img" => "https://cricketu.com/images/uae.png", "name" => "uae"],
+    ["img" => "https://cricketu.com/images/uk.png", "name" => "uk"],
+    ["img" => "https://cricketu.com/images/india.png", "name" => "india"],
     ];
 @endphp
 <x-layout>

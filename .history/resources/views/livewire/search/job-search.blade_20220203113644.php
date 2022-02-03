@@ -7,7 +7,7 @@
                     <div class="card-body">
 
                         <div class="mb-3">
-                            <label for="country_id" class="form-label fw-bold">Job Country Name</label>
+                            <label for="country_id" class="form-label">Select Country Jobs</label>
                             <select wire:model="filter.country_id" class="form-select mb-3" id="country_id">
                                 <option value="">Select Country</option>
                                 @forelse($countries as $country)
@@ -46,7 +46,7 @@
                     </div>
                     <div class="card-footer">
                         <button type="submit" wire:loading.attr="disabled" {{ $filter ? '' : 'disabled' }}
-                            class="btn btn-primary float-end m-2 px-4">
+                            class="btn btn-primary float-end m-2">
                             {{ __('Apply') }}
                         </button>
                     </div>
