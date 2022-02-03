@@ -1,4 +1,4 @@
-@props(['id', 'name', 'active', 'icon'])
+@props(['id', 'name', 'active'])
 
 @php
 $classActive = $active ?? false ? 'active' : '';

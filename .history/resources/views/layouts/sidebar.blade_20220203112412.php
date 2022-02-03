@@ -9,7 +9,7 @@
             {{-- Toggle Dropdown --}}
             <x-buttons.dropdown-side-link-button :id="__('sites')" :name="__('Websites')"
                 :active="request()->routeIs('scrapper.*')">
-                <x-slot name="icon">
+                <x-slot name="icon" class="pr-5">
                     <x-icons.website-icon />
                 </x-slot>
                 <x-buttons.side-link-button :id="__('sites')" :collaspe="__('true')"

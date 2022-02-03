@@ -5,7 +5,7 @@ $classActive = $active ?? false ? 'active' : '';
 @endphp
 
 <li class="nav-item">
-    <a class="nav-link {{ $classActive }}" data-bs-toggle="collapse" aria-current="page" href="#{{ $id ?? '' }}">
+    <a class="pr-4 nav-link {{ $classActive }}" data-bs-toggle="collapse" aria-current="page" href="#{{ $id ?? '' }}">
 
         {!! $icon ??
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
