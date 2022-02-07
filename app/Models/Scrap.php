@@ -40,7 +40,7 @@ class Scrap extends Model
         'job_posted' => 'datetime',
     ];
 
-    const PAGINATE_VALUE = 100;
+    const PAGINATE_VALUE = 5;
     const SITE_LINKEDIN = 'linkedin';
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';
@@ -48,8 +48,8 @@ class Scrap extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-        ->generateSlugsFrom('job_title')
-        ->saveSlugsTo('slug');
+            ->generateSlugsFrom('job_title')
+            ->saveSlugsTo('slug');
     }
 
     public function country(): BelongsTo
@@ -61,7 +61,7 @@ class Scrap extends Model
     {
 
         $data = $this->job_description ? Str::limit($this->job_description, 50, '...') : '';
-        
+
         return $data;
     }
 
@@ -69,7 +69,76 @@ class Scrap extends Model
     {
 
         $data = $this->job_description ? Str::limit($this->job_description, 25, '...') : '';
-        
+
         return $data;
+    }
+
+    protected static function get_list_of_site(): array
+    {
+        $data = [
+            [
+                "img" => (new self)->ui_avatars('bayt-uae'),
+                "name" => "Bayt UAE",
+                "site_name" => "bayt",
+                "country_name" => "uae",
+                "attribute_name" => "bayt-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('bayt-usa'),
+                "name" => "Bayt USA",
+                "site_name" => "bayt",
+                "country_name" => "usa",
+                "attribute_name" => "bayt-usa",
+            ],
+            [
+                "img" => (new self)->ui_avatars('job-bank'),
+                "name" => "Jobbank" ,
+                "site_name" => "jobbank",
+                "country_name" => "canada",
+                "attribute_name" => "jobbank-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('linkedin-india'),
+                "name" => "Linkedin India",
+                "site_name" => "linkedin",
+                "country_name" => "ind",
+                "attribute_name" => "linkedin-ind-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('linkedin-uae'),
+                "name" => "Linkedin UAE",
+                "site_name" => "linkedin",
+                "country_name" => "uae",
+                "attribute_name" => "linkedin-uae-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('linkedin-usa'),
+                "name" => "Linkedin USA",
+                "site_name" => "linkedin",
+                "country_name" => "usa",
+                "attribute_name" => "linkedin-usa-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('linkedin-uk'),
+                "name" => "Linkedin UK",
+                "site_name" => "linkedin",
+                "country_name" => "uk",
+                "attribute_name" => "linkedin-uk-jobs",
+            ],
+            [
+                "img" => (new self)->ui_avatars('linkedin-canada'),
+                "name" => "Linkedin Canada",
+                "site_name" => "linkedin",
+                "country_name" => "canada",
+                "attribute_name" => "linkedin-canada-jobs",
+            ],
+        ];
+
+        return $data;
+    }
+
+    protected function ui_avatars(string $name): string
+    {
+        return 'https://ui-avatars.com/api/?format=svg&background=random&name=' . $name;
     }
 }

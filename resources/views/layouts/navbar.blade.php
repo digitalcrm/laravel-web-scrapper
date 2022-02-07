@@ -1,9 +1,4 @@
-<style>
-.nav-custom {
-	background:#5d727c!important;
-}
-</style>
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow nav-custom">
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{{ url('/') }}">
         {{ config('app.name', 'Laravel') }}
     </a>
@@ -11,7 +6,7 @@
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
             <a class="nav-link px-3" href="{{ route('logout') }}" onclick="event.preventDefault();

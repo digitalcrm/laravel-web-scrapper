@@ -8,7 +8,7 @@
         </button>
 
         @env('local')
-            <a href="{{ route('scrapper.create',['site'=>$this->queryType]) }}"
+            <a href="{{ route('scrapper.create',['site'=>$this->site_name]) }}"
             type="button" class="btn btn-primary float-end ms-2">Import Jobs</a>
         @endenv
 
@@ -46,6 +46,9 @@
                             Job Title
                         </th>
                         <th>
+                            Site Name
+                        </th>
+                        <th>
                             Job Country
                         </th>
                         <th>
@@ -66,9 +69,6 @@
                         <th>
                             Job Posted
                         </th>
-                        <th class="visually-hidden">
-                            Site Name
-                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +81,9 @@
                                 <a href="{{ optional($scrap)->job_site_url }}" target="_new" rel="noopener">
                                     {{ optional($scrap)->job_title }}
                                 </a>
+                            </td>
+                            <td>
+                                {{ optional($scrap)->site_name }}
                             </td>
                             <td>
                                 {{ optional($scrap->country)->name }}
@@ -102,9 +105,6 @@
                             </td>
                             <td>
                                 {{ optional($scrap->job_posted)->isoFormat('DD-MM-YYYY') }}
-                            </td>
-                            <td class="visually-hidden">
-                                {{ optional($scrap)->site_name }}
                             </td>
                         </tr>
                     @empty

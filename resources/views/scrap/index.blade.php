@@ -1,7 +1,10 @@
 <x-layout>
     <div class="col-12">
         <h3>
-            {{ $heading }}
+            @if($heading)
+                {{ $heading['site_name'] }}
+                <span class="badge bg-secondary">{{ $heading['country_name'] }}</span>
+            @endif
         </h3>
     </div>
     <x-alert />

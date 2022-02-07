@@ -13,6 +13,8 @@
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
 
     <livewire:styles />
+    
+    @stack('styles')
 </head>
 
 <body>
@@ -29,6 +31,8 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <livewire:scripts />
+
+    @stack('scripts')
 </body>
 
 </html>
