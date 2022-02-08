@@ -53,7 +53,7 @@ class ListJobs extends Component
                 })
                 ->where('site_name', $this->site_name)
                 ->latest('job_posted')
-                ->paginate(5)
+                ->paginate(Scrap::PAGINATE_VALUE)
                 ->appends(request()->query())
                 ->withQueryString();
 

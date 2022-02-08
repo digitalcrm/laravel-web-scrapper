@@ -15,7 +15,7 @@
                             ]) }}">
                             <div class="card service-card card-inverse py-4">
                                 <div class="card-block">
-                                    <img class="flag" src="{{ $val['img'] }}"
+                                    <img class="flag" src="{{ config('app.url').$val['img'] }}"
                                         alt="{{ $val['site_name'] }}">
                                     <h4 class="card-title">{{ $val['name'] }}</h4>
                                 </div>

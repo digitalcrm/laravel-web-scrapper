@@ -1,11 +1,11 @@
 @php
 
     $data = [
-    ["img" => "https://cricketu.com/images/usa.png", "name" => "USA"],
-    ["img" => "https://cricketu.com/images/canada.png", "name" => "Canada"],
-    ["img" => "https://cricketu.com/images/uae.png", "name" => "UAE"],
-    ["img" => "https://cricketu.com/images/uk.png", "name" => "UK"],
-    ["img" => "https://cricketu.com/images/india.png", "name" => "India"],
+    ["img" => "/logo/usa.png", "name" => "USA"],
+    ["img" => "/logo/canada.png", "name" => "Canada"],
+    ["img" => "/logo/uae.png", "name" => "UAE"],
+    ["img" => "/logo/uk.png", "name" => "UK"],
+    ["img" => "/logo/india.png", "name" => "India"],
     ];
 @endphp
 <x-layout>
@@ -24,7 +24,7 @@
                             href="{{ route('search.list', ['filter[country.name]' => $val['name']]) }}">
                             <div class="card service-card card-inverse py-4">
                                 <div class="card-block">
-                                    <img class="flag" src="{{ $val['img'] }}"
+                                    <img class="flag" src="{{ config('app.url').$val['img'] }}"
                                         alt="{{ $val['name'] }}">
                                     <h4 class="card-title">{{ $val['name'] }}</h4>
                                 </div>

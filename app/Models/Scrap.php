@@ -40,7 +40,7 @@ class Scrap extends Model
         'job_posted' => 'datetime',
     ];
 
-    const PAGINATE_VALUE = 5;
+    const PAGINATE_VALUE = 20;
     const SITE_LINKEDIN = 'linkedin';
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';
@@ -77,56 +77,56 @@ class Scrap extends Model
     {
         $data = [
             [
-                "img" => (new self)->ui_avatars('bayt-uae'),
+                "img" => '/logo/uae.png',
                 "name" => "Bayt UAE",
                 "site_name" => "bayt",
                 "country_name" => "uae",
                 "attribute_name" => "bayt-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('bayt-usa'),
+                "img" => '/logo/usa.png',
                 "name" => "Bayt USA",
                 "site_name" => "bayt",
                 "country_name" => "usa",
                 "attribute_name" => "bayt-usa",
             ],
             [
-                "img" => (new self)->ui_avatars('job-bank'),
+                "img" => '/logo/jobbank-canada.jpg',
                 "name" => "Jobbank" ,
                 "site_name" => "jobbank",
                 "country_name" => "canada",
                 "attribute_name" => "jobbank-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('linkedin-india'),
+                "img" => '/logo/linkedin-india.jpg',
                 "name" => "Linkedin India",
                 "site_name" => "linkedin",
                 "country_name" => "ind",
                 "attribute_name" => "linkedin-ind-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('linkedin-uae'),
+                "img" => '/logo/linkedin-uae.jpg',
                 "name" => "Linkedin UAE",
                 "site_name" => "linkedin",
                 "country_name" => "uae",
                 "attribute_name" => "linkedin-uae-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('linkedin-usa'),
+                "img" => '/logo/linkedin-usa.jpg',
                 "name" => "Linkedin USA",
                 "site_name" => "linkedin",
                 "country_name" => "usa",
                 "attribute_name" => "linkedin-usa-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('linkedin-uk'),
+                "img" => '/logo/linkedin-uk.jpg',
                 "name" => "Linkedin UK",
                 "site_name" => "linkedin",
                 "country_name" => "uk",
                 "attribute_name" => "linkedin-uk-jobs",
             ],
             [
-                "img" => (new self)->ui_avatars('linkedin-canada'),
+                "img" => '/logo/linkedin-canada.jpg',
                 "name" => "Linkedin Canada",
                 "site_name" => "linkedin",
                 "country_name" => "canada",
