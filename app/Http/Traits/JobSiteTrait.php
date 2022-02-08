@@ -19,9 +19,8 @@ trait JobSiteTrait
     {
         $dataCollection = collect();
 
-        $url = 'https://www.bayt.com/en/'.$countryName.'/jobs';
+        $url = 'https://www.bayt.com/en/' . $countryName . '/jobs';
 
-        
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -84,7 +83,23 @@ trait JobSiteTrait
                     $job_description = $job_short_description;
                 }
 
-                $dataCollection->push(
+                // $dataCollection->push(
+                //     [
+                //         'job_title'             => $title,
+                //         'country_id'            => $countryId, // country id store
+                //         'job_site_url'          => $job_detail_link,
+                //         'job_short_description' => $job_short_description,
+                //         'job_description'       => $job_description,
+                //         'job_company'           => $job_company,
+                //         'job_state'             => $job_state,
+                //         'job_type'              => $job_type,
+                //         'job_posted'            => $job_posted,
+                //         'site_name'             => Scrap::SITE_BAYT,
+                //     ]
+                // );
+
+                Scrap::updateOrCreate(
+                    ['job_title' => $title],
                     [
                         'job_title'             => $title,
                         'country_id'            => $countryId, // country id store
@@ -98,32 +113,20 @@ trait JobSiteTrait
                         'site_name'             => Scrap::SITE_BAYT,
                     ]
                 );
+            });
 
-                // Scrap::updateOrCreate(
-                //     ['job_title' => $title],
-                //     [
-                //         'job_title'             => $title,
-                //         'country_id'            => $countryId, // country id store
-                //         'job_short_description' => $job_short_description,
-                //         'job_description'       => $job_description,
-                //         'job_company'           => $job_company,
-                //         'job_state'             => $job_state,
-                //         'job_type'              => $job_type,
-                //         'job_posted'            => $job_posted,
-                //         'site_name'             => Scrap::SITE_BAYT,
-                //     ]
-                // );
-            });
-            $dataCollection->map(function (array $row) {
-                return Arr::only(
-                    $row,
-                    [
-                        'job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
-                    ]
-                );
-            })->chunk(100)->each(function ($chunk) {
-                Scrap::upsert($chunk->all(), 'job_title');
-            });
+            // $dataCollection->map(function (array $row) {
+            //     return Arr::only(
+            //         $row,
+            //         [
+            //             'job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
+            //         ]
+            //     );
+            // })->chunk(100)->each(function ($chunk) {
+            //     Scrap::upsert($chunk->all(), 
+            //     ['job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'], 
+            //     ['job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name']);
+            // });
         }
     }
 
@@ -131,8 +134,8 @@ trait JobSiteTrait
     {
         $dataCollection = collect();
 
-        $url = 'https://www.linkedin.com/jobs/search?keywords=&location='.$countryName;
-        
+        $url = 'https://www.linkedin.com/jobs/search?keywords=&location=' . $countryName;
+
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -179,31 +182,47 @@ trait JobSiteTrait
                     $job_type = null;
                 }
 
-                $dataCollection->push(
+                // $dataCollection->push(
+                //     [
+                //         'job_title' => $title,
+                //         'country_id' => $countryId, // country id store
+                //         'job_site_url' => $job_detail_link,
+                //         'job_short_description' => Str::limit($description, 55),
+                //         'job_description' => $description,
+                //         'job_company' => $company,
+                //         'job_state' => $location,
+                //         'job_type' => $job_type,
+                //         'job_posted' => $job_posted,
+                //         'site_name' => Scrap::SITE_LINKEDIN
+                //     ]
+                // );
+
+                Scrap::updateOrCreate(
+                    ['job_title' => $title],
                     [
-                        'job_title' => $title,
-                        'country_id' => $countryId, // country id store
-                        'job_site_url' => $job_detail_link,
+                        'job_title'             => $title,
+                        'country_id'            => $countryId, // country id store
+                        'job_site_url'          => $job_detail_link,
                         'job_short_description' => Str::limit($description, 55),
-                        'job_description' => $description,
-                        'job_company' => $company,
-                        'job_state' => $location,
-                        'job_type' => $job_type,
-                        'job_posted' => $job_posted,
-                        'site_name' => Scrap::SITE_LINKEDIN
+                        'job_description'       => $description,
+                        'job_company'           => $company,
+                        'job_state'             => $location,
+                        'job_type'              => $job_type,
+                        'job_posted'            => $job_posted,
+                        'site_name'             => Scrap::SITE_BAYT,
                     ]
                 );
             });
-            $dataCollection->map(function (array $row) {
-                return Arr::only(
-                    $row,
-                    [
-                        'job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
-                    ]
-                );
-            })->chunk(100)->each(function ($chunk) {
-                Scrap::upsert($chunk->all(), 'job_title');
-            });
+            // $dataCollection->map(function (array $row) {
+            //     return Arr::only(
+            //         $row,
+            //         [
+            //             'job_title', 'country_id', 'job_site_url', 'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
+            //         ]
+            //     );
+            // })->chunk(100)->each(function ($chunk) {
+            //     Scrap::upsert($chunk->all(), 'job_title');
+            // });
         }
     }
 
@@ -212,7 +231,7 @@ trait JobSiteTrait
         $dataCollection = collect();
 
         $url = 'https://www.jobbank.gc.ca/jobsearch/jobsearch';
-        
+
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
@@ -228,7 +247,7 @@ trait JobSiteTrait
             }
 
             $crawler->filter('article')->each(function ($node) use ($client, $dataCollection, $countryId) {
-                
+
                 $linkUrl = $node->filter('a')->text();
 
                 $titleText = $node->filter('.resultJobItem > .title > .noctitle')->text();
@@ -261,50 +280,64 @@ trait JobSiteTrait
                 $crawler_detail = $client->request('GET', $job_detail_link);
 
                 if ($crawler_detail->filter('.job-posting-details-body')->count() > 0) {
-                    if ($crawler_detail->filter('.job-posting-brief > li')->count() > 0){
+                    if ($crawler_detail->filter('.job-posting-brief > li')->count() > 0) {
                         $employment_type_text = $crawler_detail->filter('.job-posting-brief > li')->eq(2)->text();
                         if (Str::contains($employment_type_text, 'Terms of employment')) {
                             $employment_type = $crawler_detail->filter('.job-posting-brief > li')->eq(2)->filter('.attribute-value')->text();
                             $job_type = $employment_type;
                         }
                     }
-                    
+
                     $description = $crawler_detail->filter('.job-posting-detail-requirements')->text();
                     $short_description = Str::limit($description, 155);
-
-
                 } else {
                     $description = null;
                     $short_description = null;
                 }
 
-                $dataCollection->push(
+                // $dataCollection->push(
+                //     [
+                //         'job_title' => $title,
+                //         'country_id' => $countryId, // country id store
+                //         'job_site_url' => $job_detail_link,
+                //         'job_short_description' => $short_description,
+                //         'job_description' => $description,
+                //         'job_company' => $business,
+                //         'job_state' => $city,
+                //         'job_type' => $job_type,
+                //         'job_salary_range' => $salary,
+                //         'job_posted' => $job_posted,
+                //         'site_name' => Scrap::SITE_JOBBANK,
+                //     ]
+                // );
+
+                Scrap::updateOrCreate(
+                    ['job_title' => $title],
                     [
-                        'job_title' => $title,
-                        'country_id' => $countryId, // country id store
-                        'job_site_url' => $job_detail_link,
-                        'job_short_description' => $short_description,
-                        'job_description' => $description,
-                        'job_company' => $business,
-                        'job_state' => $city,
-                        'job_type' => $job_type,
+                        'job_title'             => $title,
+                        'country_id'            => $countryId, // country id store
+                        'job_site_url'          => $job_detail_link,
+                        'job_short_description' => Str::limit($description, 55),
+                        'job_description'       => $description,
+                        'job_company'           => $business,
+                        'job_state'             => $city,
+                        'job_type'              => $job_type,
                         'job_salary_range' => $salary,
-                        'job_posted' => $job_posted,
-                        'site_name' => Scrap::SITE_JOBBANK,
+                        'job_posted'            => $job_posted,
+                        'site_name'             => Scrap::SITE_BAYT,
                     ]
                 );
             });
-            $dataCollection->map(function (array $row) {
-                return Arr::only(
-                    $row,
-                    [
-                        'job_title', 'country_id', 'job_site_url' ,'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
-                    ]
-                );
-            })->chunk(100)->each(function ($chunk) {
-                Scrap::upsert($chunk->all(), 'job_title');
-            });
+            // $dataCollection->map(function (array $row) {
+            //     return Arr::only(
+            //         $row,
+            //         [
+            //             'job_title', 'country_id', 'job_site_url', 'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
+            //         ]
+            //     );
+            // })->chunk(100)->each(function ($chunk) {
+            //     Scrap::upsert($chunk->all(), 'job_title');
+            // });
         }
     }
-
 }

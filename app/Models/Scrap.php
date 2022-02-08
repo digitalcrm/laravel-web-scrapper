@@ -40,7 +40,7 @@ class Scrap extends Model
         'job_posted' => 'datetime',
     ];
 
-    const PAGINATE_VALUE = 5;
+    const PAGINATE_VALUE = 20;
     const SITE_LINKEDIN = 'linkedin';
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';

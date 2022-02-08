@@ -53,12 +53,8 @@ class FetchSiteJobs extends Command
 
         $countryData = $this->get_selected_country_id_and_name($siteName)->first();
 
-        if ($this->confirm(
-            '
-            Do you wish to continue? [site: ' . $siteName . ', country: ' . $countryData['country_name'] . ' and pages: ' . $pages . ']
-            ',
-            true
-        )) {
+        if ($this->confirm('Do you wish to continue? [site: ' . $siteName . ', country: ' . $countryData['country_name'] . ' and pages: ' . $pages . ']',true)) 
+        {
             $bar = $this->output->createProgressBar($pages);
 
             $bar->start();
