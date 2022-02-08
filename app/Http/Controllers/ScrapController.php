@@ -18,19 +18,26 @@ class ScrapController extends Controller
 
     public function index()
     {
-        $requestName = request()->query('filter');
-        if ($requestName && Arr::exists($requestName, 'site_name')) {
-            $heading = Str::upper($requestName['site_name']);
-        } else {
-            $heading = 'All Jobs';
+        $data = collect();
+
+        $filteredRequest = request()->query('filter');
+
+        if ($filteredRequest && Arr::exists($filteredRequest, 'site_name') && Arr::exists($filteredRequest, 'country.sortname')) {
+
+            $heading = $data->push([
+                'site_name' => Str::title($filteredRequest['site_name']),
+                'country_name' => Str::upper($filteredRequest['country.sortname'])
+            ])->first();
+
+            return view('scrap.index', compact('heading'));
         }
 
-        return view('scrap.index', compact('heading'));
+        return redirect()->route('search.form');
     }
 
     public function create()
     {
-        abort_if(! App::environment('local'), 403);
+        abort_if(!App::environment('local'), 403);
 
         return view('scrap.create');
     }
@@ -99,5 +106,12 @@ class ScrapController extends Controller
     public function jobImport()
     {
         return view('scrap.import');
+    }
+
+    public function jobsites()
+    {
+        $data = Scrap::get_list_of_site();
+
+        return view('scrap.sites', compact('data'));
     }
 }

@@ -25,13 +25,18 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::resource('scrapper', ScrapController::class)->only('index', 'create');
-Route::get('import/jobs', [ScrapController::class, 'jobImport'])->name('scrapper.import');
+Route::controller(ScrapController::class)->group(function(){
+    Route::resource('scrapper', ScrapController::class)->only('index', 'create');
+    Route::get('import/jobs', 'jobImport')->name('scrapper.import');
+    Route::get('sites', 'jobsites')->name('scrapper.site');
+});
 
 Route::get('reports', [ReportController::class, 'index'])->name('reports');
 
-Route::get('search', [SearchController::class, 'searchForm'])->name('search.form');
-Route::get('search/list', [SearchController::class, 'index'])->name('search.list');
+Route::controller(SearchController::class)->group(function (){
+    Route::get('search', 'searchForm')->name('search.form');
+    Route::get('search/list', 'index')->name('search.list');
+});
 
 Route::get('settings/{value?}', [SettingController::class, 'index'])->name('settings');
 

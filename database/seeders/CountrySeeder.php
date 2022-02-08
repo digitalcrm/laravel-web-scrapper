@@ -27,6 +27,14 @@ class CountrySeeder extends Seeder
                 'sortname' => 'canada',
                 'name' => 'canada'
             ],
+            [
+                'sortname' => 'usa',
+                'name' => 'United States'
+            ],
+            [
+                'sortname' => 'uk',
+                'name' => 'United Kingdom'
+            ],
         ];
 
         collect($countries)->each(function ($country) {

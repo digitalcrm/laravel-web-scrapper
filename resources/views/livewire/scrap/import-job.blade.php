@@ -15,6 +15,7 @@
         <div class="mb-3">
             <label for="country_job" class="form-label">Jobs for country</label>
             <select wire:model="country" class="form-select mb-3" id="country_job">
+                <option value="">{{ __('Select Country') }}</option>
                 @forelse($countries as $country)
                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                 @empty

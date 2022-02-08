@@ -14,8 +14,18 @@ class ImportJob extends Component
 
     public $site_name = Scrap::SITE_BAYT;
     public $file;
-    public $country = 2;
+    public $country;
     public $sites = [Scrap::SITE_BAYT, Scrap::SITE_LINKEDIN, Scrap::SITE_JOBBANK];
+
+    private $country_name;
+
+    public function updatedCountry()
+    {
+        $data = Country::findOrFail($this->country);
+        if ($data) {
+            $this->country_name = $data->sortname;
+        }
+    }
 
     public function importSiteJob()
     {
@@ -27,17 +37,20 @@ class ImportJob extends Component
         try {
             if ($this->file) {
                 $importJob = new JobsImport($this->country, $this->site_name);
-                
+
                 $importJob->import($this->file);
 
                 if ($importJob->failures()->isNotEmpty()) {
                     return redirect()->route('scrapper.index')->with('error', $importJob->failures());
                 }
 
-                return redirect()->route('scrapper.index', ['site' => $validatedData['site_name']])->with('message', 'Successfully Imported');
+                return redirect()->route('scrapper.index', [
+                    'filter[site_name]' => $validatedData['site_name'],
+                    'filter[country.sortname]' => $validatedData['country'],
+                ])->with('message', 'Successfully Imported');
             }
         } catch (\Throwable $e) {
-            return redirect()->route('scrapper.import')->with('error', 'error '. $e->getMessage() . ' In your csv file add those headings => job_title, job_city, job_company, job_short_description, job_description, job_type');
+            return redirect()->route('scrapper.import')->with('error', 'error ' . $e->getMessage() . ' In your csv file add those headings => job_title, job_city, job_company, job_short_description, job_description, job_type');
         }
     }
 

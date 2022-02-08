@@ -1,6 +1,15 @@
 body {
     font-size: .875rem;
-}	tr {		vertical-align: middle!important;	}	a {		text-decoration:none!important;		color:#2557a7!important;	}
+}
+
+tr {
+    vertical-align: middle !important;
+}
+
+a {
+    text-decoration: none !important;
+    color: #2557a7 !important;
+}
 
 .feather {
     width: 16px;
@@ -100,4 +109,53 @@ body {
 .form-control-dark:focus {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+/* custom css start */
+
+/*DEMO ONLY*/
+a {
+    text-decoration: none;
+}
+
+.service-categories {
+    padding-bottom: 3em;
+    background-size: cover;
+}
+
+
+/*DEMO ONLY*/
+
+.service-categories .card {
+    transition: all 0.3s;
+}
+
+.service-categories .card-title {
+    padding-top: 0.5em;
+}
+
+.service-categories a:hover {
+    text-decoration: none;
+}
+
+.service-card {
+    background: #eee;
+    border: 1px solid #ccc;
+}
+
+.service-card:hover {
+    background: #ccc;
+    box-shadow: 2px 4px 8px 0px rgba(46, 61, 73, 0.2);
+    border: 1px solid #ccc;
+}
+
+.fa {
+    color: white;
+}
+
+.flag {
+    width: 100px;
+    height: 100px;
+    object-fit: unset;
+    border-radius: 50%;
 }
