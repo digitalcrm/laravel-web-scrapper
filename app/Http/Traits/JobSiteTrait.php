@@ -31,8 +31,8 @@ trait JobSiteTrait
             }
 
             // for command line progress bar
-            $bar->advance();
             if ($bar) {
+                $bar->advance();
             }
 
             $crawler->filter('.has-pointer-d')->each(function ($node) use ($client, $dataCollection, $countryId) {

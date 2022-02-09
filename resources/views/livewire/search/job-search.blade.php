@@ -45,10 +45,12 @@
 
                     </div>
                     <div class="card-footer">
-                        <button type="submit" wire:loading.attr="disabled" {{ $filter ? '' : 'disabled' }}
-                            class="btn btn-primary float-end m-2 px-4">
-                            {{ __('Apply') }}
-                        </button>
+                        <div class="d-grid">
+                            <button type="submit" wire:loading.attr="disabled" {{ $filter ? '' : 'disabled' }}
+                                class="btn btn-primary m-2 px-4">
+                                {{ __('Search') }}
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

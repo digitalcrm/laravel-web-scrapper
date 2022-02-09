@@ -21,7 +21,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('job:wrapping')->everyMinute();
+
+        // bayt jobs for uae and usa
+        $schedule->command('job:wrapping uae --bayt')->everyMinute();
+        $schedule->command('job:wrapping usa --bayt')->everyMinute();
+        
+        // Jobbank jobs for canada only
+        $schedule->command('job:wrapping canada --jobank')->everyMinute();
+        
+        // linkedin jobs for some few countries
+        $schedule->command('job:wrapping canada --linkedin')->everyMinute();
+        $schedule->command('job:wrapping india --linkedin')->everyMinute();
+        $schedule->command('job:wrapping usa --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uk --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uae --linkedin')->everyMinute();
     }
 
     /**
