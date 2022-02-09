@@ -43,9 +43,13 @@ class RemoveJobs extends Command
 
         if ($allJobs) {
             $data = collect($allJobs)->duplicatesStrict('job_title');
-            $count_duplicate_job = count($data);
-            if (($count_duplicate_job > 0) && $this->confirm($count_duplicate_job . ' duplicate jobs. Are you sure want to delete the jobs?', true)) {
-                $bar = $this->output->createProgressBar($count_duplicate_job);
+
+            $total_jobs = count($allJobs);
+            $total_duplicate_jobs = count($data);
+            $message = $total_duplicate_jobs . ' duplicate jobs out of '. $total_jobs ;
+            
+            if (($total_duplicate_jobs > 0) && $this->confirm($message.' Are you sure want to delete the duplicate jobs?', true)) {
+                $bar = $this->output->createProgressBar($total_duplicate_jobs);
                 $bar->start();
 
                 $data->each(function ($item) use ($bar) {
