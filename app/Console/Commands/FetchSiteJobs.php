@@ -7,6 +7,7 @@ use App\Models\Country;
 use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use App\Http\Traits\JobSiteTrait;
+use Illuminate\Support\Facades\Log;
 
 class FetchSiteJobs extends Command
 {
@@ -17,7 +18,10 @@ class FetchSiteJobs extends Command
      *
      * @var string
      */
-    protected $signature = 'job:wrapping';
+    protected $signature = 'job:wrapping {country?}
+                            {--bayt} 
+                            {--jobbank} 
+                            {--linkedin}';
 
     /**
      * The console command description.
@@ -43,6 +47,32 @@ class FetchSiteJobs extends Command
      */
     public function handle()
     {
+        if ($this->argument('country')) {
+            $countryName = $this->argument('country');
+            $countryId = $this->fetchCountryData($countryName);
+            if ($countryId) {
+                if ($this->option('bayt')) {
+                    $this->baytJobs('', 50, $countryId, $countryName);
+                } elseif ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
+                    $this->jobbankJobs('', 50, $countryId, $countryName);
+                } elseif ($this->option('linkedin')) {
+                    $this->linkedInJobs('', 50, $countryId, $countryName);
+                } else {
+                    Log::error('country id not found');
+                    $this->error('something went wrong. check your log file');
+                }
+            }
+        } else {
+            $this->fetch_job_based_on_choices();
+        }
+    }
+
+    /**
+     * fetch job based on command
+     *
+     */
+    protected function fetch_job_based_on_choices()
+    {
         $siteName = $this->choice(
             'Which sites jobs do you want to fetch?',
             ['bayt', 'linkedin', 'jobbank'],
@@ -53,8 +83,7 @@ class FetchSiteJobs extends Command
 
         $countryData = $this->get_selected_country_id_and_name($siteName)->first();
 
-        if ($this->confirm('Do you wish to continue? [site: ' . $siteName . ', country: ' . $countryData['country_name'] . ' and pages: ' . $pages . ']',true)) 
-        {
+        if ($this->confirm('Do you wish to continue? [site: ' . $siteName . ', country: ' . $countryData['country_name'] . ' and pages: ' . $pages . ']', true)) {
             $bar = $this->output->createProgressBar($pages);
 
             $bar->start();
@@ -120,6 +149,10 @@ class FetchSiteJobs extends Command
     {
         $country = Country::where('sortname', $country_name)->first();
 
-        return $country->id;
+        if ($country) {
+            return $country->id;
+        } else {
+            return false;
+        }
     }
 }
