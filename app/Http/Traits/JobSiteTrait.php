@@ -209,7 +209,7 @@ trait JobSiteTrait
                         'job_state'             => $location,
                         'job_type'              => $job_type,
                         'job_posted'            => $job_posted,
-                        'site_name'             => Scrap::SITE_BAYT,
+                        'site_name'             => Scrap::SITE_LINKEDIN,
                     ]
                 );
             });
@@ -324,7 +324,7 @@ trait JobSiteTrait
                         'job_type'              => $job_type,
                         'job_salary_range' => $salary,
                         'job_posted'            => $job_posted,
-                        'site_name'             => Scrap::SITE_BAYT,
+                        'site_name'             => Scrap::SITE_JOBBANK,
                     ]
                 );
             });
