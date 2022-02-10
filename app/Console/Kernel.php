@@ -23,18 +23,18 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         // bayt jobs for uae and usa
-        $schedule->command('job:wrapping uae --bayt')->everyThirtyMinutes();
-        $schedule->command('job:wrapping usa --bayt')->everyThirtyMinutes();
+        $schedule->command('job:wrapping uae --bayt')->everyMinute();
+        $schedule->command('job:wrapping usa --bayt')->everyMinute();
         
         // Jobbank jobs for canada only
-        $schedule->command('job:wrapping canada --jobank')->everyTwoHours();
+        $schedule->command('job:wrapping canada --jobank')->everyMinute();
         
         // linkedin jobs for some few countries
-        $schedule->command('job:wrapping canada --linkedin')->everyThirtyMinutes();
-        $schedule->command('job:wrapping india --linkedin')->everyThirtyMinutes();
-        $schedule->command('job:wrapping usa --linkedin')->everyThirtyMinutes();
-        $schedule->command('job:wrapping uk --linkedin')->everyThirtyMinutes();
-        $schedule->command('job:wrapping uae --linkedin')->everyThirtyMinutes();
+        $schedule->command('job:wrapping canada --linkedin')->everyMinute();
+        $schedule->command('job:wrapping india --linkedin')->everyMinute();
+        $schedule->command('job:wrapping usa --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uk --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uae --linkedin')->everyMinute();
     }
 
     /**
