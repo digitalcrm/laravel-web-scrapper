@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         
         // linkedin jobs for some few countries
         $schedule->command('job:wrapping canada --linkedin')->everyMinute();
-        $schedule->command('job:wrapping india --linkedin')->everyMinute();
+        $schedule->command('job:wrapping ind --linkedin')->everyMinute();
         $schedule->command('job:wrapping usa --linkedin')->everyMinute();
         $schedule->command('job:wrapping uk --linkedin')->everyMinute();
         $schedule->command('job:wrapping uae --linkedin')->everyMinute();

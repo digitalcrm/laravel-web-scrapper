@@ -56,7 +56,7 @@ class FetchSiteJobs extends Command
                 } elseif ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
                     $this->jobbankJobs('', 50, $countryId, $countryName);
                 } elseif ($this->option('linkedin')) {
-                    $this->linkedInJobs('', 50, $countryId, $countryName);
+                    $this->linkedInJobs('', 55, $countryId, $countryName);
                 } else {
                     Log::error('country id not found');
                     $this->error('something went wrong. check your log file');
