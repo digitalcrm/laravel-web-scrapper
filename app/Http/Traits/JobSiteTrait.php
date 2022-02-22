@@ -135,13 +135,12 @@ trait JobSiteTrait
         $dataCollection = collect();
 
         $url = 'https://www.linkedin.com/jobs/search?keywords=&location=' . $countryName;
-
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
         for ($i = 1; $i < $pages; $i++) {
             if ($i != 0) {
-                $crawler = $client->request('GET', $url . '&position=' . $i . '&pageNum=0');
+                $crawler = $client->request('GET', $url . '&locationId=&geoId=102713980&f_TPR=r86400&position=' . $i . '&pageNum=0');
             }
 
             // for command line progress bar

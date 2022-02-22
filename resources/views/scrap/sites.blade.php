@@ -18,6 +18,9 @@
                                     <img class="flag" src="{{ config('app.url').$val['img'] }}"
                                         alt="{{ $val['site_name'] }}">
                                     <h4 class="card-title">{{ $val['name'] }}</h4>
+                                    <p>
+                                            {{ $val['total_jobs'] }}
+                                    </p>
                                 </div>
                             </div>
                         </a>
