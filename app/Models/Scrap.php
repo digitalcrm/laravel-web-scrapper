@@ -45,6 +45,12 @@ class Scrap extends Model
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';
 
+    const COUNTRY_UAE = 1;
+    const COUNTRY_IND = 2;
+    const COUNTRY_CANADA = 3;
+    const COUNTRY_USA = 4;
+    const COUNTRY_UK = 5;
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -73,7 +79,7 @@ class Scrap extends Model
         return $data;
     }
 
-    protected static function get_list_of_site(): array
+    static protected function get_list_of_site(): array
     {
         $data = [
             [
@@ -82,6 +88,7 @@ class Scrap extends Model
                 "site_name" => "bayt",
                 "country_name" => "uae",
                 "attribute_name" => "bayt-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("bayt", self::COUNTRY_UAE),
             ],
             [
                 "img" => '/logo/usa.png',
@@ -89,13 +96,15 @@ class Scrap extends Model
                 "site_name" => "bayt",
                 "country_name" => "usa",
                 "attribute_name" => "bayt-usa",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("bayt", self::COUNTRY_USA),
             ],
             [
                 "img" => '/logo/jobbank-canada.jpg',
-                "name" => "Jobbank" ,
+                "name" => "Jobbank",
                 "site_name" => "jobbank",
                 "country_name" => "canada",
                 "attribute_name" => "jobbank-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("jobbank", self::COUNTRY_CANADA),
             ],
             [
                 "img" => '/logo/linkedin-india.jpg',
@@ -103,6 +112,7 @@ class Scrap extends Model
                 "site_name" => "linkedin",
                 "country_name" => "ind",
                 "attribute_name" => "linkedin-ind-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_IND),
             ],
             [
                 "img" => '/logo/linkedin-uae.jpg',
@@ -110,6 +120,7 @@ class Scrap extends Model
                 "site_name" => "linkedin",
                 "country_name" => "uae",
                 "attribute_name" => "linkedin-uae-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_UAE),
             ],
             [
                 "img" => '/logo/linkedin-usa.jpg',
@@ -117,6 +128,7 @@ class Scrap extends Model
                 "site_name" => "linkedin",
                 "country_name" => "usa",
                 "attribute_name" => "linkedin-usa-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_USA),
             ],
             [
                 "img" => '/logo/linkedin-uk.jpg',
@@ -124,6 +136,7 @@ class Scrap extends Model
                 "site_name" => "linkedin",
                 "country_name" => "uk",
                 "attribute_name" => "linkedin-uk-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_UK),
             ],
             [
                 "img" => '/logo/linkedin-canada.jpg',
@@ -131,8 +144,16 @@ class Scrap extends Model
                 "site_name" => "linkedin",
                 "country_name" => "canada",
                 "attribute_name" => "linkedin-canada-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_CANADA),
             ],
         ];
+
+        return $data;
+    }
+
+    public function count_jobs_for_each_site_country($siteName, $countryId)
+    {
+        $data = Scrap::where('site_name', $siteName)->where('country_id', $countryId)->count();
 
         return $data;
     }
