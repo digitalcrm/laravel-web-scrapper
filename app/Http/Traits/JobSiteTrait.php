@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 
 trait JobSiteTrait
 {
+    public $employment_type = null;
+    public $seniority_level = null;
+    public $job_function = null;
+    public $industries = null;
+
     // public $bayt_url = 'https://www.bayt.com/en/uae/jobs';
     // public $linkedin_url = 'https://www.linkedin.com/jobs/search?keywords=&location=ind';
     // public $jobbank_url = 'https://www.jobbank.gc.ca/jobsearch/jobsearch';
@@ -134,13 +139,17 @@ trait JobSiteTrait
     {
         $dataCollection = collect();
 
-        $url = 'https://www.linkedin.com/jobs/search?keywords=&location=' . $countryName;
+        $url = $this->get_country_wise_linked_url_for_job_search($countryName);
+
+        // $url = 'https://www.linkedin.com/jobs/search?location=' . $countryName . '&geoId=102713980&f_TPR=r86400&position=1&currentJobId=2930582116&pageNum=0';
+
         $client = new Client();
 
         $crawler = $client->request('GET', $url);
+
         for ($i = 1; $i < $pages; $i++) {
             if ($i != 0) {
-                $crawler = $client->request('GET', $url . '&locationId=&geoId=102713980&f_TPR=r86400&position=' . $i . '&pageNum=0');
+                $crawler = $client->request('GET', $this->get_country_wise_linked_url_for_job_search($countryName, $i));
             }
 
             // for command line progress bar
@@ -149,7 +158,11 @@ trait JobSiteTrait
                 $bar->advance();
             }
 
-            $crawler->filter('.jobs-search__results-list > li')->each(function ($node) use ($client, $dataCollection, $countryId) {
+            $crawler->filter('.jobs-search__results-list > li')->each(function ($node) use (
+                $client,
+                $dataCollection,
+                $countryId
+            ) {
                 $title = $node->filter('.job-search-card > .base-search-card__info > h3')->text();
                 $company = $node->filter('.job-search-card > .base-search-card__info > h4')->text();
                 $location = $node->filter('.job-search-card > .base-search-card__info > .base-search-card__metadata > span')->text();
@@ -171,30 +184,25 @@ trait JobSiteTrait
                 }
 
                 if (($crawler_detail->filter('.decorated-job-posting__details > .description > .core-section-container__content > .description__job-criteria-list > .description__job-criteria-item')->count()) > 0) {
-                    $employment_type = $crawler_detail->filter('.decorated-job-posting__details > .description > .core-section-container__content > .description__job-criteria-list > li')->eq(0)->text();
-                    if (Str::contains($employment_type, 'Employment type')) {
-                        $job_type = Str::remove('Employment type', $employment_type);
-                    } else {
-                        $job_type = null;
-                    }
-                } else {
-                    $job_type = null;
-                }
+                    $crawler_detail->filter('.decorated-job-posting__details > .description > .core-section-container__content > .description__job-criteria-list > .description__job-criteria-item')->each(function ($query) {
+                        $text = $query->filter('li')->text();
+                        if (Str::contains($text, 'Employment type')) {
+                            $this->employment_type = Str::remove('Employment type', $text);
+                        }
 
-                // $dataCollection->push(
-                //     [
-                //         'job_title' => $title,
-                //         'country_id' => $countryId, // country id store
-                //         'job_site_url' => $job_detail_link,
-                //         'job_short_description' => Str::limit($description, 55),
-                //         'job_description' => $description,
-                //         'job_company' => $company,
-                //         'job_state' => $location,
-                //         'job_type' => $job_type,
-                //         'job_posted' => $job_posted,
-                //         'site_name' => Scrap::SITE_LINKEDIN
-                //     ]
-                // );
+                        if (Str::contains($text, 'Seniority level')) {
+                            $this->seniority_level = Str::remove('Seniority level', $text);
+                        }
+
+                        if (Str::contains($text, 'Job function')) {
+                            $this->job_function = Str::remove('Job function', $text);
+                        }
+
+                        if (Str::contains($text, 'Industries')) {
+                            $this->industries = Str::remove('Industries', $text);
+                        }
+                    });
+                }
 
                 Scrap::updateOrCreate(
                     ['job_title' => $title],
@@ -206,22 +214,16 @@ trait JobSiteTrait
                         'job_description'       => $description,
                         'job_company'           => $company,
                         'job_state'             => $location,
-                        'job_type'              => $job_type,
+                        'job_type'              => $this->employment_type,
                         'job_posted'            => $job_posted,
                         'site_name'             => Scrap::SITE_LINKEDIN,
+                        'seniority_level'       => $this->seniority_level,
+                        'employment_type'       => $this->employment_type,
+                        'job_function'          => $this->job_function,
+                        'industries'            => $this->industries,
                     ]
                 );
             });
-            // $dataCollection->map(function (array $row) {
-            //     return Arr::only(
-            //         $row,
-            //         [
-            //             'job_title', 'country_id', 'job_site_url', 'job_short_description', 'job_description', 'job_company', 'job_state', 'job_type', 'job_posted', 'site_name'
-            //         ]
-            //     );
-            // })->chunk(100)->each(function ($chunk) {
-            //     Scrap::upsert($chunk->all(), 'job_title');
-            // });
         }
     }
 
@@ -337,6 +339,39 @@ trait JobSiteTrait
             // })->chunk(100)->each(function ($chunk) {
             //     Scrap::upsert($chunk->all(), 'job_title');
             // });
+        }
+    }
+
+    /**
+     * return url for each country
+     *
+     * @param string $countryName
+     * @param integer $position
+     * @param integer $pageNum
+     * @return string
+     */
+    protected function get_country_wise_linked_url_for_job_search(string $countryName, $position = 1, $pageNum = 0)
+    {
+        switch ($countryName) {
+            case 'canada':
+                return 'https://www.linkedin.com/jobs/search?keywords=&location=Canada&locationId=&geoId=&f_TPR=r86400&position='.$position.'&pageNum='.$pageNum;
+                break;
+
+            case 'ind':
+                return 'https://www.linkedin.com/jobs/search?keywords=&location=India&locationId=&geoId=&f_TPR=r86400&position='.$position.'&pageNum='.$pageNum;
+                break;
+
+            case 'usa':
+                return 'https://www.linkedin.com/jobs/search?keywords=&location=United%20States&locationId=&geoId=&f_TPR=r86400&position='.$position.'&pageNum='.$pageNum;
+                break;
+
+            case 'uk':
+                return 'https://www.linkedin.com/jobs/search?keywords=&location=United%20Kingdom&locationId=&geoId=&f_TPR=r86400&position='.$position.'&pageNum='.$pageNum;
+                break;
+
+            case 'uae':
+                return 'https://www.linkedin.com/jobs/search?keywords=&location=United%20Arab%20Emirates&locationId=&geoId=&f_TPR=r86400&position='.$position.'&pageNum='.$pageNum;
+                break;
         }
     }
 }

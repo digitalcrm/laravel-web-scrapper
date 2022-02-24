@@ -27,7 +27,7 @@ class CreateScrapsTable extends Migration
             $table->string('job_company')->nullable(); // job company
             $table->longText('job_short_description')->nullable();
             $table->longText('job_description')->nullable();
-            $table->string('job_type')->nullable();
+            $table->string('job_type')->nullable(); // employment type
             $table->string('job_salary_range')->nullable();
             $table->string('job_experience')->nullable();
             $table->string('job_duration')->nullable();

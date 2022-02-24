@@ -15,7 +15,17 @@ class SearchController extends Controller
     {
         $heading = null;
         $jobs = QueryBuilder::for(Scrap::class)
-            ->allowedFilters(['job_title', 'job_company', 'job_state', 'country_id', 'job_type', AllowedFilter::partial('country.name')])
+            ->allowedFilters([
+                'job_title',
+                'job_company',
+                'job_function',
+                'industries',
+                'seniority_level',
+                'job_state',
+                'country_id',
+                'job_type',
+                AllowedFilter::partial('country.name')
+            ])
             ->allowedIncludes(['country'])
             ->latest('job_posted')
             ->paginate(Scrap::PAGINATE_VALUE)

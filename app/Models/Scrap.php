@@ -34,6 +34,10 @@ class Scrap extends Model
         'job_tags',
         'job_posted',
         'site_name',
+        'employment_type',
+        'seniority_level',
+        'job_function',
+        'industries', // job category
     ];
 
     protected $casts = [

@@ -1,19 +1,21 @@
 <x-layout>
-<style>
-	tr {
-		vertical-align: middle;
-	}
-	a {
-		text-decoration:none;
-		color:#2557a7;
-	}	
-</style>
+    <style>
+        tr {
+            vertical-align: middle;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2557a7;
+        }
+
+    </style>
 
     <div class="col-12">
         <h3>
             {{ $heading ? $heading : 'Search Result' }}
-        
-		<button type="button" class="btn btn-default border position-relative">
+
+            <button type="button" class="btn btn-default border position-relative">
                 Total
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {{ $jobs->total() }}
@@ -45,6 +47,12 @@
                             </th>
                             <th width="10%">
                                 Job Type
+                            </th>
+                            <th>
+                                Job Function
+                            </th>
+                            <th>
+                                Industries
                             </th>
                             <th>
                                 Company
@@ -82,6 +90,12 @@
                                 </td>
                                 <td>
                                     {{ optional($scrap)->job_type }}
+                                </td>
+                                <td>
+                                    {{ optional($scrap)->job_function }}
+                                </td>
+                                <td>
+                                    {{ optional($scrap)->industries }}
                                 </td>
                                 <td>
                                     {{ optional($scrap)->job_company }}

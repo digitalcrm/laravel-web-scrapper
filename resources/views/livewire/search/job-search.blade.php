@@ -17,12 +17,23 @@
                             </select>
                             <x-validation-error error="filter.country_id" />
                         </div>
-
                         <div class="mb-3">
                             <label for="job_title" class="col-form-label fw-bold">Job Title</label>
                             <input wire:model="filter.job_title" type="text" class="form-control" id="job_title"
                                 name="job_title">
                             <x-validation-error error="filter.job_title" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="job_function" class="col-form-label fw-bold">Job Function</label>
+                            <input wire:model="filter.job_function" type="text" class="form-control" id="job_function"
+                                name="job_function">
+                            <x-validation-error error="filter.job_function" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="industries" class="col-form-label fw-bold">Job Industry</label>
+                            <input wire:model="filter.industries" type="text" class="form-control" id="industries"
+                                name="industries">
+                            <x-validation-error error="filter.industries" />
                         </div>
                         <div class="mb-3">
                             <label for="job_state" class="col-form-label fw-bold">City</label>
