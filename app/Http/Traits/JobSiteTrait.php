@@ -443,23 +443,23 @@ trait JobSiteTrait
     {
         switch ($countryName) {
             case 'canada':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=ind&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=Canada&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'ind':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=ind&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=India&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'usa':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=ind&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20States&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'uk':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=ind&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20Kingdom&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'uae':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=ind&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
         }
     }
