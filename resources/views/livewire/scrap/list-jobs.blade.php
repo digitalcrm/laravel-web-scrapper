@@ -49,6 +49,15 @@
                             Site Name
                         </th>
                         <th>
+                            Job Type
+                        </th>
+                        <th>
+                            Job Function
+                        </th>
+                        <th>
+                            Industries
+                        </th>
+                        <th>
                             Job Country
                         </th>
                         <th>
@@ -59,9 +68,6 @@
                         </th>
                         <th>
                             Description
-                        </th>
-                        <th>
-                            Job Type
                         </th>
                         <th>
                             Company
@@ -86,6 +92,15 @@
                                 {{ optional($scrap)->site_name }}
                             </td>
                             <td>
+                                {{ optional($scrap)->job_type }}
+                            </td>
+                            <td>
+                                {{ optional($scrap)->job_function }}
+                            </td>
+                            <td>
+                                {{ optional($scrap)->industries }}
+                            </td>
+                            <td>
                                 {{ optional($scrap->country)->name }}
                             </td>
                             <td>
@@ -96,10 +111,7 @@
                             </td>
                             <td>
                                 {{ optional($scrap)->jobDescription() }}
-                            </td>
-                            <td>
-                                {{ optional($scrap)->job_type }}
-                            </td>
+                            </td>                            
                             <td>
                                 {{ optional($scrap)->job_company }}
                             </td>

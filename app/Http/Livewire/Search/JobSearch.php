@@ -11,10 +11,12 @@ class JobSearch extends Component
     public $filter;
 
     protected $rules = [
-        'filter.job_title'      => 'nullable|string|max:55',
-        'filter.job_state'      => 'nullable|string|max:55',
-        'filter.job_type'       => 'nullable|string|max:55',
-        'filter.job_company'    => 'nullable|string|max:55',
+        'filter.job_title'      => 'nullable|string|max:255',
+        'filter.job_state'      => 'nullable|string|max:100',
+        'filter.job_function'   => 'nullable|string|max:255',
+        'filter.industries'     => 'nullable|string|max:255',
+        'filter.job_type'       => 'nullable|string|max:100',
+        'filter.job_company'    => 'nullable|string|max:100',
         'filter.country_id'     => 'nullable|exists:countries,id',
     ];
 
