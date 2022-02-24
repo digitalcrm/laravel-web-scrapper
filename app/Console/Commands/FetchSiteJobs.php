@@ -56,7 +56,7 @@ class FetchSiteJobs extends Command
                 } elseif ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
                     $this->jobbankJobs('', 50, $countryId, $countryName);
                 } elseif ($this->option('linkedin')) {
-                    $this->linkedInJobs('', 55, $countryId, $countryName);
+                    $this->linked_fetch_job_using_api('', 55, $countryId, $countryName);
                 } else {
                     Log::error('country id not found');
                     $this->error('something went wrong. check your log file');
@@ -93,7 +93,7 @@ class FetchSiteJobs extends Command
                     $this->baytJobs($bar, $pages, $countryData['country_id'], $countryData['country_name']);
                     break;
                 case 'linkedin':
-                    $this->linkedInJobs($bar, $pages, $countryData['country_id'], $countryData['country_name']);
+                    $this->linked_fetch_job_using_api($bar, $pages, $countryData['country_id'], $countryData['country_name']);
                     break;
                 case 'jobbank':
                     $this->jobbankJobs($bar, $pages, $countryData['country_id'], $countryData['country_name']);
