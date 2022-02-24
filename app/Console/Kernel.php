@@ -20,7 +20,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // linkedin jobs for some few countries
+        $schedule->command('job:wrapping canada --linkedin')->everyMinute();
+        $schedule->command('job:wrapping ind --linkedin')->everyMinute();
+        $schedule->command('job:wrapping usa --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uk --linkedin')->everyMinute();
+        $schedule->command('job:wrapping uae --linkedin')->everyMinute();
 
         // bayt jobs for uae and usa
         $schedule->command('job:wrapping uae --bayt')->everyMinute();
@@ -28,13 +33,6 @@ class Kernel extends ConsoleKernel
         
         // Jobbank jobs for canada only
         $schedule->command('job:wrapping canada --jobank')->everyMinute();
-        
-        // linkedin jobs for some few countries
-        $schedule->command('job:wrapping canada --linkedin')->everyMinute();
-        $schedule->command('job:wrapping ind --linkedin')->everyMinute();
-        $schedule->command('job:wrapping usa --linkedin')->everyMinute();
-        $schedule->command('job:wrapping uk --linkedin')->everyMinute();
-        $schedule->command('job:wrapping uae --linkedin')->everyMinute();
     }
 
     /**
