@@ -24,6 +24,7 @@ class SearchController extends Controller
                 'job_state',
                 'country_id',
                 'job_type',
+                'site_name',
                 AllowedFilter::partial('country.name')
             ])
             ->allowedIncludes(['country'])

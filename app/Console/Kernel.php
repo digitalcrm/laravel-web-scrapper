@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
 
         // bayt jobs for uae and usa
         $schedule->command('job:wrapping uae --bayt')->everyMinute();
-        $schedule->command('job:wrapping usa --bayt')->everyMinute();
+        // $schedule->command('job:wrapping usa --bayt')->everyMinute();
         
         // Jobbank jobs for canada only
         $schedule->command('job:wrapping canada --jobank')->everyMinute();
