@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Search;
 
+use App\Models\Scrap;
 use App\Models\Country;
 use Livewire\Component;
+use App\Models\JobFunction;
+use App\Models\JobIndustry;
 use Illuminate\Support\Arr;
 
 class JobSearch extends Component
@@ -18,6 +21,7 @@ class JobSearch extends Component
         'filter.job_type'       => 'nullable|string|max:100',
         'filter.job_company'    => 'nullable|string|max:100',
         'filter.country_id'     => 'nullable|exists:countries,id',
+        'filter.site_name'      => 'nullable|in:linkedin,bayt,jobbank',
     ];
 
     protected $messages = [
@@ -27,7 +31,7 @@ class JobSearch extends Component
     public function applyFilter()
     {
         $validatedData = $this->validate();
-        
+
         if ($validatedData) {
             return redirect()->route('search.list', Arr::query($validatedData));
         }
@@ -36,7 +40,10 @@ class JobSearch extends Component
     public function render()
     {
         $countries = Country::select('id', 'name', 'slug')->get();
+        $job_function = JobFunction::select('id', 'name')->get();
+        $job_industry = JobIndustry::select('id', 'name')->get();
+        $sites = Scrap::site_names();
 
-        return view('livewire.search.job-search', compact('countries'));
+        return view('livewire.search.job-search', compact('countries', 'job_function', 'job_industry', 'sites'));
     }
 }

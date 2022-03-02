@@ -1,45 +1,40 @@
-<div>
-    <div class="row g-5 g-xl-10 mb-xl-10">
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
-            <div class="card card-flush h-md-50 mb-5 mb-xl-10">
-                <div class="card-header pt-3">
-                    <div class="card-title d-flex flex-column">
-                        <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-primary position-relative" disabled>
-                                {{ __('Total Jobs') }}
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $totalJobs }}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pt-2 pb-4 d-flex align-items-center">
-                    <div class="d-flex flex-center pt-2">
-                        <div id="kt_card_widget_4_chart" style="min-width: 100%; min-height: 70px" data-kt-size="70"
-                            data-kt-line="11"></div>
-                    </div>
-                    <div class="d-flex flex-column content-justify-center w-100">
-                        <div class="d-flex fs-6 fw-bold align-items-center">
-                            <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
-                            <div class="text-gray-500 flex-grow-1 me-4">Bayt Jobs</div>
-                            <div class="fw-boldest text-gray-700 text-xxl-end">{{ $baytJobs }}</div>
-                        </div>
+<div class="row g-5 g-xl-10 mb-xl-10">
+    <h3>
+        {{ __('JOBS') }}
+        <span class="badge bg-info">{{ $filtered_jobs }}</span>
+    </h3>
 
-                        <div class="d-flex fs-6 fw-bold align-items-center">
-                            <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
-                            <div class="text-gray-500 flex-grow-1 me-4">LinkedIn Jobs</div>
-                            <div class="fw-boldest text-gray-700 text-xxl-end">{{ $linkedinJobs }}</div>
-                        </div>
-
-                        <div class="d-flex fs-6 fw-bold align-items-center">
-                            <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
-                            <div class="text-gray-500 flex-grow-1 me-4">JobBank Jobs</div>
-                            <div class="fw-boldest text-gray-700 text-xxl-end">{{ $jobbankJobs }}</div>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-md-12 mb-md-5">
+        <div class="card">
+            <div class="card-header">
+                <select wire:model="date_type" name="date_filter" id="date_filter"
+                    class="form-select form-select-lg mb-3">
+                    <option value="all_time">All Time</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-striped table-sm table-borderless">
+                    <caption>Total jobs: {{ $filtered_jobs }}</caption>
+                    <thead>
+                        <tr>
+                            <th class="fw-normal">{{ __('Sites') }}</th>
+                            <th class="fw-normal">{{ __('Total Jobs') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($total_jobs_for_each_site as $siteJob)
+                            <tr>
+                                <td>{{ $siteJob['name'] }}</td>
+                                <td>{{ $siteJob['total_jobs'] }}</td>
+                            </tr>
+                        @empty
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

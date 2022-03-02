@@ -5,7 +5,6 @@
             <div class="card">
                 <form wire:submit.prevent="applyFilter">
                     <div class="card-body">
-
                         <div class="mb-3">
                             <label for="country_id" class="form-label fw-bold">Job Country Name</label>
                             <select wire:model="filter.country_id" class="form-select mb-3" id="country_id">
@@ -18,21 +17,50 @@
                             <x-validation-error error="filter.country_id" />
                         </div>
                         <div class="mb-3">
+                            <label for="site_name" class="form-label fw-bold">Sites</label>
+                            <select wire:model="filter.site_name" class="form-select mb-3" id="site_name">
+                                <option value="">Select Sites</option>
+                                @forelse($sites as $site)
+                                    <option value="{{ $site['name'] }}">{{ $site['name'] }}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                            <x-validation-error error="filter.site_name" />
+                        </div>
+                        <div class="mb-3">
                             <label for="job_title" class="col-form-label fw-bold">Job Title</label>
                             <input wire:model="filter.job_title" type="text" class="form-control" id="job_title"
                                 name="job_title">
                             <x-validation-error error="filter.job_title" />
                         </div>
                         <div class="mb-3">
-                            <label for="job_function" class="col-form-label fw-bold">Job Function</label>
-                            <input wire:model="filter.job_function" type="text" class="form-control" id="job_function"
-                                name="job_function">
+                            <label for="job_function" class="form-label fw-bold">Job Function</label>
+                            {{-- <input wire:model="filter.job_function" type="text" class="form-control" id="job_function"
+                                name="job_function"> --}}
+                            <select wire:model="filter.job_function" name="job_function" id="job_function"
+                                class="form-select mb-3">
+                                <option value="">Select Job Function</option>
+                                @forelse($job_function as $function)
+                                    <option value="{{ optional($function)->name }}">
+                                        {{ optional($function)->name }}</option>
+                                @empty
+                                @endforelse
+                            </select>
                             <x-validation-error error="filter.job_function" />
                         </div>
                         <div class="mb-3">
                             <label for="industries" class="col-form-label fw-bold">Job Industry</label>
-                            <input wire:model="filter.industries" type="text" class="form-control" id="industries"
-                                name="industries">
+                            {{-- <input wire:model="filter.industries" type="text" class="form-control" id="industries"
+                                name="industries"> --}}
+                            <select wire:model="filter.industries" name="industries" id="industries"
+                                class="form-select mb-3">
+                                <option value="">Select Job Industry</option>
+                                @forelse($job_industry as $industry)
+                                    <option value="{{ optional($industry)->name }}">
+                                        {{ optional($industry)->name }}</option>
+                                @empty
+                                @endforelse
+                            </select>
                             <x-validation-error error="filter.industries" />
                         </div>
                         <div class="mb-3">
@@ -57,7 +85,8 @@
                     </div>
                     <div class="card-footer">
                         <div class="d-grid">
-                            <button type="submit" wire:loading.attr="disabled" {{ $filter ? '' : 'disabled' }}
+                            <button type="submit" wire:loading.attr="disabled"
+                                {{ $filter ? '' : 'disabled' }}
                                 class="btn btn-primary m-2 px-4">
                                 {{ __('Search') }}
                             </button>
