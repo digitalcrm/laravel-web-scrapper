@@ -11,8 +11,8 @@
                     class="form-select form-select-lg mb-3">
                     <option value="all_time">All Time</option>
                     <option value="weekly">Weekly</option>
-                    <option value="today">Today</option>
-                    <option value="yesterday">Yesterday</option>
+                    {{-- <option value="today">Today</option> --}}
+                    {{-- <option value="yesterday">Yesterday</option> --}}
                     <option value="monthly">Monthly</option>
                 </select>
             </div>
