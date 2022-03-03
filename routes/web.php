@@ -25,19 +25,23 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::controller(ScrapController::class)->group(function(){
+Route::controller(ScrapController::class)->group(function () {
     Route::resource('scrapper', ScrapController::class)->only('index', 'create');
     Route::get('import/jobs', 'jobImport')->name('scrapper.import');
     Route::get('sites', 'jobsites')->name('scrapper.site');
 });
 
-Route::get('reports', [ReportController::class, 'index'])->name('reports');
+Route::controller(ReportController::class)->group(function () {
+    Route::get('reports', 'index')->name('reports');
+    Route::get('stats', 'stats')->name('stats');
+});
 
-Route::controller(SearchController::class)->group(function (){
+Route::controller(SearchController::class)->group(function () {
     Route::get('search', 'searchForm')->name('search.form');
     Route::get('search/list', 'index')->name('search.list');
+    Route::get('export-jobs', 'export')->name('export.jobs');
 });
 
 Route::get('settings/{value?}', [SettingController::class, 'index'])->name('settings');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

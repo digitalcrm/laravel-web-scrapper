@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Scrap;
+use App\Exports\JobExport;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -11,6 +12,11 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class SearchController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $heading = null;
@@ -25,7 +31,8 @@ class SearchController extends Controller
                 'country_id',
                 'job_type',
                 'site_name',
-                AllowedFilter::partial('country.name')
+                AllowedFilter::partial('country.name'),
+                AllowedFilter::partial('country.sortname')
             ])
             ->allowedIncludes(['country'])
             ->latest('job_posted')
@@ -44,5 +51,21 @@ class SearchController extends Controller
     public function searchForm()
     {
         return view('scrap.search');
+    }
+
+    public function export(Request $request)
+    {
+        $validatedData = $request->validate([
+            'filter.job_title'      => 'nullable|string|max:255',
+            'filter.job_state'      => 'nullable|string|max:100',
+            'filter.job_function'   => 'nullable|string|max:255',
+            'filter.industries'     => 'nullable|string|max:255',
+            'filter.job_type'       => 'nullable|string|max:100',
+            'filter.job_company'    => 'nullable|string|max:100',
+            'filter.country_id'     => 'nullable|exists:countries,id',
+            'filter.site_name'      => 'nullable|in:linkedin,bayt,jobbank',
+        ]);
+
+        return (new JobExport)->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
     }
 }

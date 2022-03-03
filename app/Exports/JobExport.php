@@ -3,15 +3,15 @@
 namespace App\Exports;
 
 use App\Models\Scrap;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
-use Maatwebsite\Excel\Concerns\WithMapping;
 
 class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
 {
@@ -29,16 +29,27 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
     public function collection()
     {
         try {
-            $data = Scrap::with('country')
-                ->whereNotNull('job_short_description')
-                ->whereNotNull('job_description')
-                ->select($this->selectedColumn())
-                ->latest()
-                ->take(1000)
-                ->get();
+            $data = QueryBuilder::for(Scrap::class)
+                ->allowedFilters([
+                    'job_title',
+                    'job_company',
+                    'job_function',
+                    'industries',
+                    'seniority_level',
+                    'job_state',
+                    'country_id',
+                    'job_type',
+                    'site_name',
+                    AllowedFilter::partial('country.name'),
+                    AllowedFilter::partial('country.sortname')
+                ])
+                ->allowedFields($this->selectedColumn())
+                ->allowedIncludes(['country'])
+                ->latest('job_posted')->get();
+
             return $data;
         } catch (\Throwable $th) {
-            dd('error '. $th->getMessage());
+            dd('error ' . $th->getMessage());
         }
     }
 
@@ -61,6 +72,9 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
                 $job->job_short_description,
                 $job->job_description,
                 $job->job_type,
+                $job->job_function,
+                $job->industries,
+                $job->job_company,
                 $job->job_posted,
             ];
         }
@@ -84,11 +98,19 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
             return [
                 'job_title', 'country_id', 'job_short_description', 'job_description', 'job_type', 'job_posted'
             ];
-        } else {
-            return [
-                'job_title', 'country_id', 'job_state', 'job_short_description', 'job_description', 'job_type', 'job_posted'
-            ];
         }
+
+        return [
+            'job_title',
+            'country_id',
+            'job_short_description',
+            'job_description',
+            'job_type',
+            'job_function',
+            'industries',
+            'job_company',
+            'job_posted',
+        ];
     }
 
     protected function customHeading()
@@ -97,10 +119,19 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
             return [
                 'job_title', 'job_country', 'job_short_description', 'job_description', 'job_type', 'inserted'
             ];
-        } else {
-            return [
-                'job_title', 'job_country', 'job_city', 'job_short_description', 'job_description', 'job_type', 'job_posted'
-            ];
         }
+
+        return [
+            'job_title',
+            'job_country',
+            'state',
+            'job_short_description',
+            'job_description',
+            'job_type',
+            'job_function',
+            'industries',
+            'job_company',
+            'inserted'
+        ];
     }
 }
