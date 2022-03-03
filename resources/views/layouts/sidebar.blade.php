@@ -45,7 +45,8 @@
                 <x-icons.website-icon /> {{ __('Websites') }}
             </x-buttons.side-link-button>
 
-            <x-buttons.side-link-button :href="route('scrapper.import')" :active="request()->routeIs('scrapper.import')">
+            <x-buttons.side-link-button :href="route('scrapper.import')"
+                :active="request()->routeIs('scrapper.import')">
                 <x-icons.page-icon /> {{ __('Import Jobs using csv') }}
             </x-buttons.side-link-button>
 
@@ -73,6 +74,11 @@
                 <x-buttons.side-link-button :id="__('settings')" :collaspe="__('true')" :href="url('settings/vpn')"
                     :show="request()->routeIs('settings')" :active="request()->is('settings/vpn')">
                     <x-icons.circle-icon /> {{ __('Vpn') }}
+                </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('settings')" :collaspe="__('true')" :href="url('stats')"
+                    :show="request()->routeIs('settings')" :active="request()->is('stats')">
+                    <x-icons.circle-icon /> {{ __('Stats') }}
                 </x-buttons.side-link-button>
 
             </x-buttons.dropdown-side-link-button>
