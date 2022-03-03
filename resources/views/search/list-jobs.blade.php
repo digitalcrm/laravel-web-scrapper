@@ -24,6 +24,11 @@
     </div>
     <x-alert />
     <div class="card">
+        <div class="card-header">
+            @if($jobs->total() > 0)
+                <x-buttons.export-btn />
+            @endif
+        </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-striped table-sm">

@@ -20,11 +20,6 @@ class ListJobs extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public function exportJobs(string $value = null)
-    {
-        return (new JobExport($value))->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
-    }
-
     public function mount()
     {
         $filter = request()->query('filter');
@@ -36,14 +31,6 @@ class ListJobs extends Component
 
     public function render()
     {
-        // $scrapper = Scrap::query()
-        //     ->whereHas('country', function (Builder $query) {
-        //         $query->where('sortname', $this->country_name);
-        //     })
-        //     ->where('site_name', $this->site_name)
-        //     ->latest()
-        //     ->paginate(Scrap::PAGINATE_VALUE);
-
         if ($this->site_name && $this->country_name) {
             $scrapper = QueryBuilder::for(Scrap::class)
                 ->allowedFilters(['job_title', 'site_name', 'job_company', 'job_state', 'country_id', 'job_type', AllowedFilter::partial('country.sortname')])

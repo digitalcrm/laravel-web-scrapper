@@ -36,6 +36,7 @@ Route::get('reports', [ReportController::class, 'index'])->name('reports');
 Route::controller(SearchController::class)->group(function (){
     Route::get('search', 'searchForm')->name('search.form');
     Route::get('search/list', 'index')->name('search.list');
+    Route::get('export-jobs', 'export')->name('export.jobs');
 });
 
 Route::get('settings/{value?}', [SettingController::class, 'index'])->name('settings');
