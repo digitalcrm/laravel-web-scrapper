@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Scrap;
 use App\Models\Country;
-use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use App\Http\Traits\JobSiteTrait;
 use Illuminate\Support\Facades\Log;
@@ -123,7 +121,7 @@ class FetchSiteJobs extends Command
         } elseif ($siteName == 'bayt') {
             $countryName = $this->choice(
                 'select country',
-                ['uae', 'ind', 'canada', 'usa', 'uk'],
+                ['uae', 'ind', 'canada', 'usa', 'uk', 'sa'],
                 0,
             );
             $countryId = $this->fetchCountryData($countryName);
@@ -131,7 +129,7 @@ class FetchSiteJobs extends Command
         } else {
             $countryName = $this->choice(
                 'select country',
-                ['uae', 'ind', 'canada', 'usa', 'uk'],
+                ['uae', 'ind', 'canada', 'usa', 'uk', 'sa'],
                 0,
             );
             $countryId = $this->fetchCountryData($countryName);

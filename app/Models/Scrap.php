@@ -55,6 +55,7 @@ class Scrap extends Model
     const COUNTRY_CANADA = 3;
     const COUNTRY_USA = 4;
     const COUNTRY_UK = 5;
+    const COUNTRY_SAUDI_ARABIA = 6;
 
     public function getSlugOptions(): SlugOptions
     {
@@ -183,6 +184,14 @@ class Scrap extends Model
             //     "total_jobs"    => (new self)->count_jobs_for_each_site_country("bayt", self::COUNTRY_USA, $date_type),
             // ],
             [
+                "img" => '/logo/saudi-arabia.png',
+                "name" => "Bayt Saudi Arabia",
+                "site_name" => "bayt",
+                "country_name" => "sa",
+                "attribute_name" => "bayt-sa",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("bayt", self::COUNTRY_SAUDI_ARABIA, $date_type),
+            ],
+            [
                 "img" => '/logo/jobbank-canada.jpg',
                 "name" => "Jobbank",
                 "site_name" => "jobbank",
@@ -229,6 +238,14 @@ class Scrap extends Model
                 "country_name" => "canada",
                 "attribute_name" => "linkedin-canada-jobs",
                 "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_CANADA, $date_type),
+            ],
+            [
+                "img" => '/logo/linkedin-sa.jpg',
+                "name" => "Linkedin Saudi Arabia",
+                "site_name" => "linkedin",
+                "country_name" => "sa",
+                "attribute_name" => "linkedin-sa-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_SAUDI_ARABIA, $date_type),
             ],
         ];
 

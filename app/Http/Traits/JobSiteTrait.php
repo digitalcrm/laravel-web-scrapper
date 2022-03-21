@@ -24,6 +24,10 @@ trait JobSiteTrait
     {
         $dataCollection = collect();
 
+        if ($countryName == 'sa') {
+            $countryName = 'saudi-arabia';
+        }
+        
         $url = 'https://www.bayt.com/en/' . $countryName . '/jobs';
 
         $client = new Client();
@@ -460,6 +464,10 @@ trait JobSiteTrait
 
             case 'uae':
                 return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                break;
+
+            case 'sa':
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
         }
     }
