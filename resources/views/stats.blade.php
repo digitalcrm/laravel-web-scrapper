@@ -10,24 +10,23 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Device Name') }}</th>
-                                <th>{{ __('Platform Name') }}</th>
-                                <th>{{ __('Version') }}</th>
                                 <th>{{ __('IP') }}</th>
                                 <th>{{ __('IS BOT') }}</th>
                                 <th>{{ __('User') }}</th>
+                                <th>{{ __('Logged In') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($devices as $device)
                                 <tr>
                                     <td>{{ optional($device)->device_type }}</td>
-                                    <td>{{ $device['data']['platform_name'] ?? '' }}
-                                    </td>
-                                    <td>{{ $device['data']['version'] ?? '' }}
-                                    </td>
+
                                     <td>{{ optional($device)->ip }}</td>
-                                    <td>{{ $device['data']['is_bot'] ? 'true' : 'false' }}
+                                    
+                                    <td>
+                                        {{ $device['data']['is_bot'] ? 'true' : 'false' }}
                                     </td>
+
                                     <td>
                                         @forelse($device->pivot as $pivot)
                                             <span class="badge bg-danger">
@@ -36,6 +35,10 @@
                                         @empty
                                         @endforelse
                                     </td>
+
+                                    <th>
+                                        {{ optional($device->created_at)->diffForHumans() }}
+                                    </th>
                                 </tr>
                             @empty
                                 <tr>

@@ -6,6 +6,7 @@
     ["img" => "/logo/uae.png", "name" => "UAE"],
     ["img" => "/logo/uk.png", "name" => "UK"],
     ["img" => "/logo/india.png", "name" => "India"],
+    ["img" => "/logo/saudi-arabia.png", "name" => "Saudi Arabia"],
     ];
 @endphp
 <x-layout>
