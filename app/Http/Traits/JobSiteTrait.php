@@ -346,17 +346,18 @@ trait JobSiteTrait
         }
     }
 
-    public function linked_fetch_job_using_api($bar = null, int $pages = 50, int $countryId, string $countryName = 'uae')
+    public function linked_fetch_job_using_api($bar = null, int $pages = 50, int $countryId, string $countryName = 'uae', string $keyword_value = null)
     {
         $dataCollection = collect();
 
-        $url = $this->get_country_wise_linked_url_for_job_search($countryName, 0);
+        $url = $this->get_country_wise_linked_url_for_job_search($countryName, 0, $keyword_value);
+
         $client = new Client();
         $crawler = $client->request('GET', $url);
 
         for ($i = 0; $i <= $pages; $i++) {
             if ($i != 0) {
-                $updatedUrl = $this->get_country_wise_linked_url_for_job_search($countryName, $i);
+                $updatedUrl = $this->get_country_wise_linked_url_for_job_search($countryName, $i, $keyword_value);
                 $crawler = $client->request('GET', $updatedUrl);
             }
 
@@ -368,7 +369,8 @@ trait JobSiteTrait
             $crawler->filter('li')->each(function ($node) use (
                 $client,
                 $dataCollection,
-                $countryId
+                $countryId,
+                $keyword_value
             ) {
                 
                 $this->title = $node->filter('.job-search-card > .base-search-card__info > h3')->text();
@@ -430,6 +432,7 @@ trait JobSiteTrait
                         'employment_type'       => $this->employment_type,
                         'job_function'          => $this->job_function,
                         'industries'            => $this->industries,
+                        'search_text'           => $keyword_value    
                     ]
                 );
             });
@@ -443,32 +446,37 @@ trait JobSiteTrait
      * @param integer $pageNum
      * @return string
      */
-    protected function get_country_wise_linked_url_for_job_search(string $countryName = 'usa', $start)
+    protected function get_country_wise_linked_url_for_job_search(string $countryName = 'usa', $start = 0, $keyword = null)
     {
         switch ($countryName) {
             case 'canada':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=Canada&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=Canada&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'ind':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=India&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=India&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'usa':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20States&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20States&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'uk':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20Kingdom&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20Kingdom&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'uae':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
 
             case 'sa':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
                 break;
         }
+    }
+
+    protected function fetch_keyword_jobs()
+    {
+        dd('running');
     }
 }

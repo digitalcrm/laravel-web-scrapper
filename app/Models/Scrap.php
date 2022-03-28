@@ -39,6 +39,7 @@ class Scrap extends Model
         'seniority_level',
         'job_function',
         'industries', // job category
+        'search_text',
     ];
 
     protected $casts = [
@@ -250,5 +251,17 @@ class Scrap extends Model
         ];
 
         return $data;
+    }
+
+    public static function distinct_search_text_category()
+    {
+        $tags = self::query()
+                    ->select('search_text')
+                    ->whereNotNull('search_text')
+                    ->distinct('search_text')
+                    ->take(10)
+                    ->get();
+
+        return $retVal = ($tags) ? $tags : null;
     }
 }

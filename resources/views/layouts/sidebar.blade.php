@@ -54,9 +54,24 @@
                 <x-icons.report-icon /> {{ __('Reports') }}
             </x-buttons.side-link-button>
 
-            <x-buttons.side-link-button :href="route('search.form')" :active="request()->routeIs('search.form')">
-                <x-icons.search-icon /> {{ __('Search') }}
-            </x-buttons.side-link-button>
+            <x-buttons.dropdown-side-link-button :id="__('search')" :name="__('Search')"
+                :active="request()->routeIs('search.form')">
+
+                <x-slot name="icon">
+                    <x-icons.search-icon />
+                </x-slot>
+                
+                <x-buttons.side-link-button :id="__('search')" :collaspe="__('true')" :href="route('search.form')"
+                    :show="request()->routeIs('search.form')" :active="request()->is('search?by=search')">
+                    <x-icons.circle-icon /> {{ __('Search') }}
+                </x-buttons.side-link-button>
+
+                <x-buttons.side-link-button :id="__('search')" :collaspe="__('true')" :href="route('search.form', ['by' => 'keyword'])"
+                    :show="request()->routeIs('search.form')" :active="request()->is('search?by=keyword')">
+                    <x-icons.circle-icon /> {{ __('Search By Keyword') }}
+                </x-buttons.side-link-button>
+
+            </x-buttons.dropdown-side-link-button>
 
             {{-- settings --}}
             <x-buttons.dropdown-side-link-button :id="__('settings')" :name="__('Setting')"

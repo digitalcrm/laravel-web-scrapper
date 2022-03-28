@@ -35,6 +35,9 @@ class Kernel extends ConsoleKernel
         
         // Jobbank jobs for canada only
         $schedule->command('job:wrapping canada --jobank')->everyMinute();
+
+        // job fetch based on keywords and country for linkedin
+        $schedule->command('job:wrapping usa "Medical Doctor" --linkedin');
     }
 
     /**
