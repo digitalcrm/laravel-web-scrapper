@@ -1,12 +1,12 @@
 @php
 
     $data = [
-    ["img" => "/logo/usa.png", "name" => "USA"],
-    ["img" => "/logo/canada.png", "name" => "Canada"],
-    ["img" => "/logo/uae.png", "name" => "UAE"],
-    ["img" => "/logo/uk.png", "name" => "UK"],
-    ["img" => "/logo/india.png", "name" => "India"],
-    ["img" => "/logo/saudi-arabia.png", "name" => "Saudi Arabia"],
+    ["img" => "/logo/usa.png", "name" => "USA", "sortname" => "usa"],
+    ["img" => "/logo/canada.png", "name" => "Canada", "sortname" => "canada"],
+    ["img" => "/logo/uae.png", "name" => "UAE", "sortname" => "uae"],
+    ["img" => "/logo/uk.png", "name" => "UK", "sortname" => "uk"],
+    ["img" => "/logo/india.png", "name" => "India", "sortname" => "ind"],
+    ["img" => "/logo/saudi-arabia.png", "name" => "Saudi Arabia", "sortname" => "sa"],
     ];
 @endphp
 <x-layout>
@@ -22,7 +22,7 @@
                 @forelse($data as $val)
                     <div class="col-md-4 mb-4">
                         <a
-                            href="{{ route('search.list', ['filter[country.name]' => $val['name']]) }}">
+                            href="{{ route('search.list', ['filter[country.sortname]' => $val['name']]) }}">
                             <div class="card service-card card-inverse py-4">
                                 <div class="card-block">
                                     <img class="flag" src="{{ config('app.url').$val['img'] }}"
