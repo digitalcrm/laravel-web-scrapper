@@ -16,7 +16,7 @@ class FetchSiteJobs extends Command
      *
      * @var string
      */
-    protected $signature = 'job:wrapping {country?}
+    protected $signature = 'job:wrapping {country?} {keyword_value?}
                             {--bayt} 
                             {--jobbank} 
                             {--linkedin}';
@@ -48,16 +48,22 @@ class FetchSiteJobs extends Command
         if ($this->argument('country')) {
             $countryName = $this->argument('country');
             $countryId = $this->fetchCountryData($countryName);
-            if ($countryId) {
+            if ($countryId && !($this->argument('keyword_value'))) {
                 if ($this->option('bayt')) {
                     $this->baytJobs('', 50, $countryId, $countryName);
                 } elseif ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
                     $this->jobbankJobs('', 50, $countryId, $countryName);
                 } elseif ($this->option('linkedin')) {
                     $this->linked_fetch_job_using_api('', 55, $countryId, $countryName);
+                } elseif ($this->option('keyword')) {
+                    $this->fetch_keyword_jobs();
                 } else {
                     Log::error('country id not found');
                     $this->error('something went wrong. check your log file');
+                }
+            } else {
+                if ($this->option('linkedin') && $this->argument('keyword_value')) {
+                    $this->linked_fetch_job_using_api('', 55, $countryId, $countryName, $this->argument('keyword_value'));
                 }
             }
         } else {

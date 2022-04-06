@@ -40,6 +40,7 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
                     'country_id',
                     'job_type',
                     'site_name',
+                    'search_text',
                     AllowedFilter::partial('country.name'),
                     AllowedFilter::partial('country.sortname')
                 ])
