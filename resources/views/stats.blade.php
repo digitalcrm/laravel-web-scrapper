@@ -11,6 +11,8 @@
                             <tr>
                                 <th>{{ __('Device Name') }}</th>
                                 <th>{{ __('IP') }}</th>
+                                <th>{{ __('Country') }}</th>
+                                <th>{{ __('City') }}</th>
                                 <th>{{ __('IS BOT') }}</th>
                                 <th>{{ __('User') }}</th>
                                 <th>{{ __('Logged In') }}</th>
@@ -22,6 +24,10 @@
                                     <td>{{ optional($device)->device_type }}</td>
 
                                     <td>{{ optional($device)->ip }}</td>
+
+                                    <td>{{ \Stevebauman\Location\Facades\Location::get("122.177.109.125")->countryName ?? ''}}</td>
+
+                                    <td>{{ \Stevebauman\Location\Facades\Location::get("122.177.109.125")->cityName ?? '' }}</td>
                                     
                                     <td>
                                         {{ $device['data']['is_bot'] ? 'true' : 'false' }}
