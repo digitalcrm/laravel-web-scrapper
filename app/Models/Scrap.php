@@ -50,6 +50,7 @@ class Scrap extends Model
     const SITE_LINKEDIN = 'linkedin';
     const SITE_BAYT = 'bayt';
     const SITE_JOBBANK = 'jobbank';
+    const SITE_INDEED = 'indeed';
 
     const COUNTRY_UAE = 1;
     const COUNTRY_IND = 2;
@@ -97,6 +98,9 @@ class Scrap extends Model
             ],
             [
                 'name' => self::SITE_LINKEDIN,
+            ],
+            [
+                'name' => self::SITE_INDEED,
             ],
         ];
 
@@ -247,6 +251,14 @@ class Scrap extends Model
                 "country_name" => "sa",
                 "attribute_name" => "linkedin-sa-jobs",
                 "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_SAUDI_ARABIA, $date_type),
+            ],
+            [
+                "img" => '/logo/indeed-usa.jpg',
+                "name" => "Indeed USA",
+                "site_name" => "indeed",
+                "country_name" => "usa",
+                "attribute_name" => "indeed-usa-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("indeed", self::COUNTRY_USA, $date_type),
             ],
         ];
 

@@ -30,7 +30,6 @@ class Kernel extends ConsoleKernel
 
         // bayt jobs for uae and usa
         $schedule->command('job:wrapping uae --bayt')->everyMinute();
-        // // $schedule->command('job:wrapping usa --bayt')->everyMinute();
         $schedule->command('job:wrapping sa --bayt')->everyMinute();
         
         // Jobbank jobs for canada only
@@ -38,6 +37,9 @@ class Kernel extends ConsoleKernel
 
         // job fetch based on keywords and country for linkedin
         $schedule->command('job:wrapping usa "Medical Doctor" --linkedin');
+
+        // indeed jobs only for usa inside "" use keyword for search
+        $schedule->command('job:wrapping usa "" "New York, Ny" --indeed');
     }
 
     /**

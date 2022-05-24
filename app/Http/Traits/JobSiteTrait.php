@@ -27,7 +27,7 @@ trait JobSiteTrait
         if ($countryName == 'sa') {
             $countryName = 'saudi-arabia';
         }
-        
+
         $url = 'https://www.bayt.com/en/' . $countryName . '/jobs';
 
         $client = new Client();
@@ -372,12 +372,12 @@ trait JobSiteTrait
                 $countryId,
                 $keyword_value
             ) {
-                
+
                 $this->title = $node->filter('.job-search-card > .base-search-card__info > h3')->text();
                 $this->company = $node->filter('.job-search-card > .base-search-card__info > h4')->text();
                 $this->location = $node->filter('.job-search-card > .base-search-card__info > .base-search-card__metadata > span')->text();
                 $this->dateTime = $node->filter('.job-search-card > .base-search-card__info > .base-search-card__metadata > time')->text();
-                
+
                 if (Str::contains($this->dateTime, 'Just now')) {
                     $this->job_posted = now();
                 } else {
@@ -432,12 +432,110 @@ trait JobSiteTrait
                         'employment_type'       => $this->employment_type,
                         'job_function'          => $this->job_function,
                         'industries'            => $this->industries,
-                        'search_text'           => $keyword_value    
+                        'search_text'           => $keyword_value
                     ]
                 );
             });
         }
     }
+
+    protected function indeed_jobs($bar = null, int $pages = 2, int $countryId, string $countryName = 'usa', $cityName = "New York, NY", $keyword = null)
+    {
+        if ($keyword == "") {
+            $keyword = null;
+        }
+
+        $url = $this->indeed_country_url($countryName, $cityName, $keyword);
+
+        $client = new Client();
+
+        $crawler = $client->request('GET', $url);
+        for ($i = 0; $i < $pages; $i++) {
+            if ($i != 0) {
+                $crawler = $client->request('GET', $this->indeed_country_url($countryName, $cityName, $keyword, $i * 10));
+            }
+            // for command line progress bar
+            if ($bar) {
+                $bar->advance();
+            }
+            $crawler->filter('#mosaic-provider-jobcards > .sponTapItem')->each(function ($node) use ($client, $countryId) {
+
+                $linkUrl = $node->filter('a')->text();
+                $this->title = $node->filter('.jobTitle > span')->text();
+                $this->company = $node->filter('.company_location > .companyName')->text();
+                $this->location = $node->filter('.companyLocation')->text();
+                
+                if ($node->filter('.salaryOnly > .metadata')->count() > 0) {
+                    $node->filter('.salaryOnly > .metadata > .attribute_snippet')->each(function($node) {
+                        if (Str::contains('Job type', $node->children()->attr('aria-label'))) {
+                            $this->employment_type = $node->text(); 
+                        }
+                    });
+                }
+
+                // get date
+                $jobposted = $node->filter('.tapItem-gutter > .date')->text();
+                $date = Str::substr($jobposted, 6);
+
+                // convert Just posted string to current date
+                if (Str::contains($date, 'Just posted') OR Str::contains($date, 'Ongoing')) {
+                    $this->dateTime = now();
+                } else {
+                    $this->dateTime = Carbon::parse($date);
+                }
+
+
+                $job_detail_link = $node->selectLink($linkUrl)->link()->getUri();
+                
+                // job view page access
+                $crawler_detail = $client->request('GET', $job_detail_link);
+                if ($crawler_detail->filter('#jobDescriptionText')->count() > 0) {
+
+                    // job description
+                    $description = $crawler_detail->filter('#jobDescriptionText')->text();
+
+                    // $stripHtml = strip_tags($crawler_detail->filter('#jobDescriptionText')->html(), '<p><ul><li><b><h1><h2><h3><h4><h5><h6>');
+                    // $removeNewLine = preg_replace("(\n)", "", $stripHtml);
+
+                    // $short_description = strip_tags(Str::limit($des1, 155));
+                    // $description = trim($removeNewLine);
+                } else {
+                    $description = null;
+                    $short_description = null;
+                }
+                
+                Scrap::updateOrCreate(
+                    ['job_title' => $this->title, 'job_state' => $this->location],
+                    [
+                        'job_title'             => $this->title,
+                        'job_company'           => $this->company,
+                        'country_id'            => $countryId, // country id store
+                        'job_site_url'          => $job_detail_link,
+                        'job_short_description' => Str::limit($description, 155),
+                        'job_description'       => $description,
+                        'job_state'             => $this->location,
+                        'job_posted'            => $this->dateTime,
+                        'job_type'              => $this->employment_type,
+                        'site_name'             => Scrap::SITE_INDEED,
+                    ]
+                );
+            });
+        }
+    }
+
+    protected function indeed_country_url(string $countryName, string $location, string $keyword = null, $start = 0)
+    {
+        switch ($countryName) {
+            case 'ind':
+                return "https://in.indeed.com/jobs?q=$keyword&l=$location&fromage=1&start=$start";
+                break;
+
+            default:
+                return "https://www.indeed.com/jobs?q=$keyword&l=$location&fromage=1&start=$start";
+                break;
+        }
+    }
+
     /**
      * return url for each country
      *
@@ -450,33 +548,28 @@ trait JobSiteTrait
     {
         switch ($countryName) {
             case 'canada':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=Canada&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Canada&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
 
             case 'ind':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=India&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=India&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
 
             case 'usa':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20States&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=United%20States&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
 
             case 'uk':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20Kingdom&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=United%20Kingdom&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
 
             case 'uae':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=United%20Arab%20Emirates&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
 
             case 'sa':
-                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords='.$keyword.'&location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start='.$start * 25;
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
         }
-    }
-
-    protected function fetch_keyword_jobs()
-    {
-        dd('running');
     }
 }

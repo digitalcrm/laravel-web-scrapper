@@ -16,9 +16,10 @@ class FetchSiteJobs extends Command
      *
      * @var string
      */
-    protected $signature = 'job:wrapping {country?} {keyword_value?}
+    protected $signature = 'job:wrapping {country?} {keyword_value?} {city_for_indeed?}
                             {--bayt} 
                             {--jobbank} 
+                            {--indeed} 
                             {--linkedin}';
 
     /**
@@ -45,28 +46,42 @@ class FetchSiteJobs extends Command
      */
     public function handle()
     {
+        $total_no_of_page = 50;
+
         if ($this->argument('country')) {
             $countryName = $this->argument('country');
             $countryId = $this->fetchCountryData($countryName);
-            if ($countryId && !($this->argument('keyword_value'))) {
+
+            if ($countryId) {
+                // fetch indeed jobs required fields are city name and option indeed
+                if ($this->argument('city_for_indeed') && $this->option('indeed')) {
+                    $this->indeed_jobs('', $total_no_of_page, $countryId, $countryName, $this->argument('city_for_indeed'), $this->argument('keyword_value'));
+                }
+
+                // fetch linkedin jobs required fields keyword and option linkdedin
+                if ($this->option('linkedin')) {
+                    $this->linked_fetch_job_using_api('', $total_no_of_page, $countryId, $countryName, $this->argument('keyword_value'));
+                }
+
+                // fetch bayt jobs
                 if ($this->option('bayt')) {
-                    $this->baytJobs('', 50, $countryId, $countryName);
-                } elseif ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
-                    $this->jobbankJobs('', 50, $countryId, $countryName);
-                } elseif ($this->option('linkedin')) {
-                    $this->linked_fetch_job_using_api('', 55, $countryId, $countryName);
-                } elseif ($this->option('keyword')) {
-                    $this->fetch_keyword_jobs();
-                } else {
-                    Log::error('country id not found');
-                    $this->error('something went wrong. check your log file');
+                    $this->baytJobs('', $total_no_of_page, $countryId, $countryName);
                 }
+
+                // fetch jobbank jobs
+                if ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
+                    $this->jobbankJobs('', $total_no_of_page, $countryId, $countryName);
+                }
+
             } else {
-                if ($this->option('linkedin') && $this->argument('keyword_value')) {
-                    $this->linked_fetch_job_using_api('', 55, $countryId, $countryName, $this->argument('keyword_value'));
-                }
+                // if country id not found
+                Log::error('country id not found');
+                $this->error('something went wrong. check your log file');
             }
-        } else {
+        }
+
+        // if no arguments and options provided
+        if (!($this->argument('country'))) {
             $this->fetch_job_based_on_choices();
         }
     }
