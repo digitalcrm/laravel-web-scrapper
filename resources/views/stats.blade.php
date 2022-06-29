@@ -25,9 +25,9 @@
 
                                     <td>{{ optional($device)->ip }}</td>
 
-                                    <td>{{ \Stevebauman\Location\Facades\Location::get("122.177.109.125")->countryName ?? ''}}</td>
+                                    <td>{{ \Stevebauman\Location\Facades\Location::get(optional($device)->ip)->countryName ?? ''}}</td>
 
-                                    <td>{{ \Stevebauman\Location\Facades\Location::get("122.177.109.125")->cityName ?? '' }}</td>
+                                    <td>{{ \Stevebauman\Location\Facades\Location::get(optional($device)->ip)->cityName ?? '' }}</td>
                                     
                                     <td>
                                         {{ $device['data']['is_bot'] ? 'true' : 'false' }}
@@ -35,16 +35,14 @@
 
                                     <td>
                                         @forelse($device->pivot as $pivot)
-                                            <span class="badge bg-danger">
-                                                {{ $pivot->user->name }}
-                                            </span>
+                                            {{ $pivot->user->name }}
                                         @empty
                                         @endforelse
                                     </td>
 
-                                    <th>
-                                        {{ optional($device->created_at)->diffForHumans() }}
-                                    </th>
+                                    <td>
+                                        {{ optional($device->created_at)->isoFormat('DD-MM-YYYY') }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
