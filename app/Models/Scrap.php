@@ -58,6 +58,7 @@ class Scrap extends Model
     const COUNTRY_USA = 4;
     const COUNTRY_UK = 5;
     const COUNTRY_SAUDI_ARABIA = 6;
+    const COUNTRY_LIBERIA = 7;
 
     public function getSlugOptions(): SlugOptions
     {
@@ -251,6 +252,14 @@ class Scrap extends Model
                 "country_name" => "sa",
                 "attribute_name" => "linkedin-sa-jobs",
                 "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_SAUDI_ARABIA, $date_type),
+            ],
+            [
+                "img" => '/logo/liberia.webp',
+                "name" => "Linkedin Liberia",
+                "site_name" => "linkedin",
+                "country_name" => "liberia",
+                "attribute_name" => "linkedin-liberia-jobs",
+                "total_jobs"    => (new self)->count_jobs_for_each_site_country("linkedin", self::COUNTRY_LIBERIA, $date_type),
             ],
             [
                 "img" => '/logo/indeed-usa.jpg',

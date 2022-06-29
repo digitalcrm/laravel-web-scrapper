@@ -7,6 +7,7 @@
     ["img" => "/logo/uk.png", "name" => "UK", "sortname" => "uk"],
     ["img" => "/logo/india.png", "name" => "India", "sortname" => "ind"],
     ["img" => "/logo/saudi-arabia.png", "name" => "Saudi Arabia", "sortname" => "sa"],
+    ["img" => "/logo/liberia.webp", "name" => "Liberia", "sortname" => "liberia"],
     ];
 @endphp
 <x-layout>

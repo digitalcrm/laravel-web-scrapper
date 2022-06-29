@@ -570,6 +570,14 @@ trait JobSiteTrait
             case 'sa':
                 return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Saudi+Arabia&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
+
+            case 'liberia':
+                // below for all jobs
+                return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Liberia&position=1&pageNum=0&start=' . $start * 25;
+                
+                // below for latest jobs
+                // return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Liberia&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
+                break;
         }
     }
 }
