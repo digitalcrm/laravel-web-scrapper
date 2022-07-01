@@ -93,7 +93,9 @@
                                 {{ optional($scrap)->jobDescription() }}
                             </td>                            
                             <td>
-                                {{ optional($scrap)->job_company }}
+                                <a href="{{ optional($scrap)->company_link }}" target="_new" rel="noopener">
+                                    {{ optional($scrap)->job_company }}
+                                </a>
                             </td>
                             <td>
                                 {{ optional($scrap->job_posted)->isoFormat('DD-MM-YYYY') }}

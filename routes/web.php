@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScrapController;
 use App\Http\Controllers\SearchController;
@@ -35,6 +36,8 @@ Route::controller(ReportController::class)->group(function () {
     Route::get('reports', 'index')->name('reports');
     Route::get('stats', 'stats')->name('stats');
 });
+
+Route::get('companies', [CompanyController::class, 'index'])->name('company.index');
 
 Route::controller(SearchController::class)->group(function () {
     Route::get('search', 'searchForm')->name('search.form');

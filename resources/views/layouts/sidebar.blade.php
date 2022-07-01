@@ -45,6 +45,10 @@
                 <x-icons.website-icon /> {{ __('Websites') }}
             </x-buttons.side-link-button>
 
+            <x-buttons.side-link-button :href="route('company.index')" :active="request()->routeIs('company.index')">
+                <x-icons.company-icon /> {{ __('Companies') }}
+            </x-buttons.side-link-button>
+
             <x-buttons.side-link-button :href="route('scrapper.import')"
                 :active="request()->routeIs('scrapper.import')">
                 <x-icons.page-icon /> {{ __('Import Jobs using csv') }}

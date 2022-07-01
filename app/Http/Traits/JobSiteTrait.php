@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use Carbon\Carbon;
 use Goutte\Client;
 use App\Models\Scrap;
+use App\Models\Company;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -386,8 +387,16 @@ trait JobSiteTrait
 
                 // get url for detail page
                 $job_detail_link = $node->selectLink($this->title)->link()->getUri();
+
+                // company url
+                $company_url = $node->selectLink($this->company)->link()->getUri();
+
                 // fetch detail url
                 $crawler_detail = $client->request('GET', $job_detail_link);
+
+                // company data
+                // $companyData = $this->scrap_linkedin_company_data($client->request('GET', $company_url));
+
                 // get details
                 if ($crawler_detail->filter('.decorated-job-posting__details > .description')->count() > 0) {
                     $description = $crawler_detail->filter('.decorated-job-posting__details > .description')->text();
@@ -415,6 +424,7 @@ trait JobSiteTrait
                     });
                 }
 
+
                 Scrap::updateOrCreate(
                     ['job_title' => $this->title],
                     [
@@ -432,9 +442,19 @@ trait JobSiteTrait
                         'employment_type'       => $this->employment_type,
                         'job_function'          => $this->job_function,
                         'industries'            => $this->industries,
-                        'search_text'           => $keyword_value
+                        'search_text'           => $keyword_value,
+                        'company_link'          => $company_url,
                     ]
                 );
+
+                Company::updateOrCreate(
+                    ['name' => $this->company],
+                    [
+                        'name'          => $this->company,
+                        'external_url'  => $company_url,
+                    ]
+                );
+                
             });
         }
     }
@@ -579,5 +599,12 @@ trait JobSiteTrait
                 // return 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=' . $keyword . '&location=Liberia&f_TPR=r86400&position=1&pageNum=0&start=' . $start * 25;
                 break;
         }
+    }
+
+    public function scrap_linkedin_company_data($crawler)
+    {
+        $companyName = $crawler->filter('.top-card-layout__title')->text();
+
+        dd($companyName);
     }
 }
