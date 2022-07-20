@@ -22,8 +22,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('job:wrapping canada --gov-uk')->everyMinute();
-        
         // // linkedin jobs for some few countries
         // $schedule->command('job:wrapping canada --linkedin')->everyMinute();
         // $schedule->command('job:wrapping ind --linkedin')->everyMinute();
@@ -47,7 +45,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('job:wrapping usa "" "New York, Ny" --indeed');
 
         // gov.uk jobs
-        // $schedule->command('job:wrapping london --gov-uk')->everyMinute();
+        $schedule->command('job:wrapping london --gov-uk')->everyMinute();
 
     }
 

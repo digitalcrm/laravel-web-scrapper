@@ -55,6 +55,13 @@
                         <th>
                             Job Posted
                         </th>
+                        <th>annual_wage</th>
+                        <th>working_week</th>
+                        <th>expected_duration</th>
+                        <th>possible_start_date</th>
+                        <th>closing_date</th>
+                        <th>apprenticeship_level</th>
+                        <th>reference_number</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,8 +105,15 @@
                                 </a>
                             </td>
                             <td>
-                                {{ optional($scrap->job_posted)->isoFormat('DD-MM-YYYY') }}
+                                {{ optional($scrap->job_posted)->format('d-M-Y') }}
                             </td>
+                            <td>{{ optional($scrap)->annual_wage }}</td>
+                            <td>{{ optional($scrap)->working_week }}</td>
+                            <td>{{ optional($scrap)->expected_duration }}</td>
+                            <td>{{ optional($scrap->possible_start_date)->format('d-M-Y') }}</td>
+                            <td>{{ optional($scrap->closing_date)->format('d-M-Y') }}</td>
+                            <td>{{ optional($scrap)->apprenticeship_level }}</td>
+                            <td>{{ optional($scrap)->reference_number }}</td>
                         </tr>
                     @empty
                         <tr>

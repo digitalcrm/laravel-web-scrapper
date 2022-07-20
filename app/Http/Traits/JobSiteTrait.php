@@ -627,31 +627,69 @@ trait JobSiteTrait
                 $countryId,
             ) {
 
+                $annual_wage = null;
+                $working_week = null;
+                $expected_duration = null;
+                $possible_start_date = null;
+                $apprenticeship_level = null;
+                $reference_number = null;
+                $description = null;
+                $date_posted = null;
+                $closing_date = null;
+
                 $this->title = $node->filter('.search-result > h2')->text();
                 $this->url = $node->selectLink($this->title)->link()->getUri();
                 $this->company = $node->filter('.search-result > ul > .secondary-text')->text();
                 $short_description = $node->filter('.search-result > p')->text();
+                // if ($node->filter('.search-result > .grid-row > .column-two-thirds > ul > li > #closing-date-value')->count() > 0) {
+                //     $date_close = $node->filter('.search-result > .grid-row > .column-two-thirds > ul > li > #closing-date-value')->text();
+                
+                // // The carbon parse gives an error in case of string like: in 3 days
+                
+                //     $closing_date = Carbon::parse($date_close);
+                // }
 
                 // get detail
                 $crawler_detail = $client->request('GET', $this->url);
 
                 if($crawler_detail->filter('#vacancy-info')->count() > 0) {
+
+                    // closing date get
+                    if ($crawler_detail->filter('.grid-row > .column-one-third > #vacancy-closing-date')->count() > 0) {
+                        $closed_date = $crawler_detail->filter('.grid-row > .column-one-third > #vacancy-closing-date')->text();
+
+                        if(Str::contains($closed_date, 'Closing date:')) {
+                            $closed_date = Str::remove('Closing date:', $closed_date);
+                            $closing_date = Carbon::parse($closed_date);
+                        }
+                    }
+                    // description get
                     if ($crawler_detail->filter('#vacancy-info > .column-two-thirds')->count() > 0) {
                         $description = $crawler_detail->filter('#vacancy-info > .column-two-thirds')->text();
-                    } else {
-                        $description = null;
                     }
+
+                    // additional info get
                     if ($crawler_detail->filter('#vacancy-info > .column-one-third')->count() > 0) {
+
                         $this->dateTime = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-posted-date')->text();
                         $date_posted = Carbon::parse($this->dateTime);
-                    } else {
-                        $date_posted = null;
+                        
+                        $annual_wage = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-wage')->text();
+                        $week_work = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-working-week')->text();
+                        $working_hour = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #total-hours-per-week')->text();
+                        $working_week = $week_work . ' ' . $working_hour;
+                        
+                        $expected_duration = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-expected-duration')->text();
+                        
+                        $vacancy_start_date = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-start-date')->text();
+                        $possible_start_date = Carbon::parse($vacancy_start_date);
+                        
+                        $apprenticeship_level = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-type')->text();
+                        $reference_number = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-reference-id')->text();
+                        
                     }
-                } else {
-                    $description = null;
-                    $date_posted = null;
                 }
-                
+
                 Scrap::updateOrCreate(
                     ['job_title' => $this->title],
                     [
@@ -663,6 +701,13 @@ trait JobSiteTrait
                         'job_company'           => $this->company,
                         'job_posted'            => $date_posted,
                         'site_name'             => Scrap::SITE_GOV_UK,
+                        'annual_wage'           => $annual_wage,
+                        'working_week'          => $working_week,
+                        'expected_duration'     => $expected_duration,
+                        'closing_date'          => $closing_date,
+                        'possible_start_date'   => $possible_start_date,
+                        'apprenticeship_level'  => $apprenticeship_level,
+                        'reference_number'      => $reference_number,
                     ]
                 );
 

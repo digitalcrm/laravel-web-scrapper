@@ -41,10 +41,19 @@ class Scrap extends Model
         'industries', // job category
         'search_text',
         'company_link',
+        'annual_wage',
+        'working_week',
+        'expected_duration',
+        'possible_start_date',
+        'closing_date',
+        'apprenticeship_level',
+        'reference_number',
     ];
 
     protected $casts = [
-        'job_posted' => 'datetime',
+        'job_posted'          => 'datetime',
+        'possible_start_date' => 'datetime',
+        'closing_date'        => 'datetime',
     ];
 
     const PAGINATE_VALUE = 20;
@@ -263,14 +272,14 @@ class Scrap extends Model
                 "attribute_name" => "indeed-usa-jobs",
                 "total_jobs"    => (new self)->count_jobs_for_each_site_country("indeed", self::getCountryId('usa'), $date_type),
             ],
-            [
-                "img" => 'https://ui-avatars.com/api/?format=svg&background=random&name='.self::SITE_GOV_UK,
-                "name" => "GOV.UK (Canada job)",
-                "site_name" => "gov.uk",
-                "country_name" => "canada",
-                "attribute_name" => "gov-canada",
-                "total_jobs"    => (new self)->count_jobs_for_each_site_country("gov.uk", self::getCountryId('canada'), $date_type),
-            ],
+            // [
+            //     "img" => 'https://ui-avatars.com/api/?format=svg&background=random&name='.self::SITE_GOV_UK,
+            //     "name" => "GOV.UK (Canada job)",
+            //     "site_name" => "gov.uk",
+            //     "country_name" => "canada",
+            //     "attribute_name" => "gov-canada",
+            //     "total_jobs"    => (new self)->count_jobs_for_each_site_country("gov.uk", self::getCountryId('canada'), $date_type),
+            // ],
             [
                 "img" => 'https://ui-avatars.com/api/?format=svg&background=random&name='.self::SITE_GOV_UK,
                 "name" => "GOV.UK (London job)",
