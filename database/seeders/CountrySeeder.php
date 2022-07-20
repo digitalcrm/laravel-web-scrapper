@@ -43,10 +43,17 @@ class CountrySeeder extends Seeder
                 'sortname' => 'liberia',
                 'name' => 'Liberia'
             ],
+            [
+                'sortname' => 'london',
+                'name' => 'London'
+            ],
         ];
 
         collect($countries)->each(function ($country) {
-            Country::create($country);
+            Country::updateOrCreate(
+                ['sortname' => $country['sortname']],
+                $country
+            );
         });
     }
 }

@@ -601,10 +601,86 @@ trait JobSiteTrait
         }
     }
 
-    public function scrap_linkedin_company_data($crawler)
-    {
-        $companyName = $crawler->filter('.top-card-layout__title')->text();
 
-        dd($companyName);
+    public function job_list_for_gov_uk($bar = null, int $pages = 50, int $countryId, string $countryName = 'london', string $keyword_value = null)
+    {
+        $url = $this->gov_uk_url($countryName, 1);
+
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+
+        if ($crawler->filter('#vacancy-result-summary')->count() > 0) {
+            $total_text = $crawler->filter('#vacancy-result-summary > #result-message > .bold-medium')->text();
+            $pages = $total_text / 5;
+        }
+
+        for ($i = 1; $i <= $pages; $i++) {
+            $updatedUrl = $this->gov_uk_url($countryName, $i);
+            $crawler = $client->request('GET', $updatedUrl);
+            // for command line progress bar
+            if ($bar) {
+                $bar->advance();
+            }
+
+            $crawler->filter('.search-result')->each(function ($node) use (
+                $client,
+                $countryId,
+            ) {
+
+                $this->title = $node->filter('.search-result > h2')->text();
+                $this->url = $node->selectLink($this->title)->link()->getUri();
+                $this->company = $node->filter('.search-result > ul > .secondary-text')->text();
+                $short_description = $node->filter('.search-result > p')->text();
+
+                // get detail
+                $crawler_detail = $client->request('GET', $this->url);
+
+                if($crawler_detail->filter('#vacancy-info')->count() > 0) {
+                    if ($crawler_detail->filter('#vacancy-info > .column-two-thirds')->count() > 0) {
+                        $description = $crawler_detail->filter('#vacancy-info > .column-two-thirds')->text();
+                    } else {
+                        $description = null;
+                    }
+                    if ($crawler_detail->filter('#vacancy-info > .column-one-third')->count() > 0) {
+                        $this->dateTime = $crawler_detail->filter('#vacancy-info > .column-one-third > ul > li > #vacancy-posted-date')->text();
+                        $date_posted = Carbon::parse($this->dateTime);
+                    } else {
+                        $date_posted = null;
+                    }
+                } else {
+                    $description = null;
+                    $date_posted = null;
+                }
+                
+                Scrap::updateOrCreate(
+                    ['job_title' => $this->title],
+                    [
+                        'job_title'             => $this->title,
+                        'country_id'            => $countryId, // country id store
+                        'job_site_url'          => $this->url,
+                        'job_short_description' => $short_description,
+                        'job_description'       => $description,
+                        'job_company'           => $this->company,
+                        'job_posted'            => $date_posted,
+                        'site_name'             => Scrap::SITE_GOV_UK,
+                    ]
+                );
+
+                Company::updateOrCreate(
+                    ['name' => $this->company],
+                    [
+                        'name'  => $this->company,
+                    ]
+                );
+                
+            });
+        }
+    }
+
+    public function gov_uk_url($countryName, $page, $resultPerPage=5)
+    {
+        $url = 'https://www.findapprenticeship.service.gov.uk/apprenticeships?ApprenticeshipLevel=All&Hash=&Location='.$countryName.'&LocationType=&PageNumber='.$page.'&ResultsPerPage='.$resultPerPage.'&SearchAction=Search&SearchField=All&SearchMode=Keyword&SortType=&WithinDistance=&DisabilityConfidentOnly=';
+
+        return $url;
     }
 }

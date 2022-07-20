@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ScrapController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ScrapController;
+use App\Http\Controllers\PeopleController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ Route::controller(ReportController::class)->group(function () {
 });
 
 Route::get('companies', [CompanyController::class, 'index'])->name('company.index');
+Route::get('peoples', [PeopleController::class, 'index'])->name('people.index');
 
 Route::controller(SearchController::class)->group(function () {
     Route::get('search', 'searchForm')->name('search.form');

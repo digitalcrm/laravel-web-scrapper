@@ -20,7 +20,9 @@ class FetchSiteJobs extends Command
                             {--bayt} 
                             {--jobbank} 
                             {--indeed} 
-                            {--linkedin}';
+                            {--linkedin}
+                            {--gov-uk}
+                            {--people}';
 
     /**
      * The console command description.
@@ -71,6 +73,11 @@ class FetchSiteJobs extends Command
                 // fetch jobbank jobs
                 if ($this->option('jobbank') && ($this->argument('country') == 'canada')) {
                     $this->jobbankJobs('', $total_no_of_page, $countryId, $countryName);
+                }
+
+                // fetch job of gov.uk https://www.findapprenticeship.service.gov.uk/
+                if ($this->option('gov-uk')) {
+                    $this->job_list_for_gov_uk('', $total_no_of_page, $countryId, $countryName, $this->argument('keyword_value'));
                 }
 
             } else {
@@ -174,4 +181,5 @@ class FetchSiteJobs extends Command
             return false;
         }
     }
+
 }
