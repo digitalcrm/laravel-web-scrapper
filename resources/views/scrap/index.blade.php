@@ -7,6 +7,5 @@
             @endif
         </h3>
     </div>
-    <x-alert />
     <livewire:scrap.list-jobs />
 </x-layout>

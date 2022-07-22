@@ -64,7 +64,7 @@ class SearchController extends Controller
             'filter.job_type'       => 'nullable|string|max:100',
             'filter.job_company'    => 'nullable|string|max:100',
             'filter.country_id'     => 'nullable|exists:countries,id',
-            'filter.site_name'      => 'nullable|in:linkedin,bayt,jobbank',
+            'filter.site_name'      => 'nullable|in:linkedin,bayt,jobbank,gov.uk',
         ]);
 
         return (new JobExport)->download('jobs.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);

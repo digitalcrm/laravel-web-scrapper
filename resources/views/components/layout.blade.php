@@ -13,7 +13,7 @@
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
 
     <livewire:styles />
-    
+
     @stack('styles')
 </head>
 
@@ -23,6 +23,9 @@
         <div class="row">
             @include('layouts.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 my-4">
+                <div class="col-12">
+                    <x-alert />
+                </div>
                 {{ $slot }}
             </main>
         </div>

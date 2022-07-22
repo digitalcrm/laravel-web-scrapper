@@ -77,6 +77,13 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
                 $job->industries,
                 $job->job_company,
                 $job->job_posted,
+                $job->annual_wage,
+                $job->working_week,
+                $job->expected_duration,
+                $job->possible_start_date,
+                $job->closing_date,
+                $job->apprenticeship_level,
+                $job->reference_number,
             ];
         }
     }
@@ -111,6 +118,13 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
             'industries',
             'job_company',
             'job_posted',
+            'annual_wage',
+            'working_week',
+            'expected_duration',
+            'possible_start_date',
+            'closing_date',
+            'apprenticeship_level',
+            'reference_number',
         ];
     }
 
@@ -132,7 +146,14 @@ class JobExport implements FromCollection, WithHeadings, WithEvents, WithMapping
             'job_function',
             'industries',
             'job_company',
-            'inserted'
+            'job_posted',
+            'annual_wage',
+            'working_week',
+            'expected_duration',
+            'possible_start_date',
+            'closing_date',
+            'apprenticeship_level',
+            'reference_number',
         ];
     }
 }
