@@ -30,7 +30,7 @@
             @endif
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
+            <div class="table-responsive scroll-fixed">
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>

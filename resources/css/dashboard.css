@@ -159,3 +159,7 @@ a {
     object-fit: unset;
     border-radius: 50%;
 }
+
+.scroll-fixed {
+    height: 72vh;
+}
