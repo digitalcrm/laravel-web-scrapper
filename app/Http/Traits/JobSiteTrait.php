@@ -624,7 +624,7 @@ trait JobSiteTrait
 
             $crawler->filter('.search-result')->each(function ($node) use (
                 $client,
-                $countryId,
+                $countryId
             ) {
 
                 $annual_wage = null;
